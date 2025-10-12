@@ -24,13 +24,13 @@
 static constexpr int DEFAULT_GEARSET_GREEN_VEL = 200;
 static constexpr int DEFAULT_GEARSET_BLUE_VEL = 600; // if you use blue
 
-// Motors
-pros::Motor high_goal_motor(MOTOR_HIGH_GOAL_PORT);
-pros::Motor middle_goal_motor(MOTOR_MIDDLE_GOAL_PORT);
-pros::Motor intake_motor_a(MOTOR_INTAKE_PORT_A);
-pros::Motor intake_motor_b(MOTOR_INTAKE_PORT_B);
-pros::Motor indexer_motor_a(MOTOR_INDEXER_PORT_A);
-pros::Motor indexer_motor_b(MOTOR_INDEXER_PORT_B);
+// Motors (defined in the subsystems namespace so externs in the header link)
+pros::Motor subsystems::high_goal_motor(MOTOR_HIGH_GOAL_PORT);
+pros::Motor subsystems::middle_goal_motor(MOTOR_MIDDLE_GOAL_PORT);
+pros::Motor subsystems::intake_motor_a(MOTOR_INTAKE_PORT_A);
+pros::Motor subsystems::intake_motor_b(MOTOR_INTAKE_PORT_B);
+pros::Motor subsystems::indexer_motor_a(MOTOR_INDEXER_PORT_A);
+pros::Motor subsystems::indexer_motor_b(MOTOR_INDEXER_PORT_B);
 
 namespace subsystems {
 
