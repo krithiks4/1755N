@@ -1,5 +1,19 @@
 #include "main.h"
 
+// ------------------------
+// Motor port configuration
+// Update these port numbers to match your robot wiring. These defines
+// are intended to be edited by you; manipulators.cpp provides sensible
+// fallbacks if you don't update them here.
+#define MOTOR_HIGH_GOAL_PORT 1   // green motor - high goal (clockwise)
+#define MOTOR_MIDDLE_GOAL_PORT 2 // green motor - middle goal (counterclockwise)
+#define MOTOR_INTAKE_PORT_A 3    // intake motor A (1/2 motor)
+#define MOTOR_INTAKE_PORT_B 4    // intake motor B (1/2 motor)
+#define MOTOR_INDEXER_PORT_A 11  // indexer motor A (1/2 motor)
+#define MOTOR_INDEXER_PORT_B 12  // indexer motor B (1/2 motor)
+
+#include "subsystems.hpp"
+
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
 // https://ez-robotics.github.io/EZ-Template/
@@ -78,6 +92,9 @@ void initialize() {
   chassis.initialize();
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
+
+  // Initialize subsystem (motors, states)
+  subsystems::initialize();
 }
 
 /**
@@ -253,9 +270,8 @@ void opcontrol() {
     // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
     // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
 
-    // . . .
-    // Put more user control code here!
-    // . . .
+  // Update subsystem (button handling)
+  subsystems::update_opcontrol();
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
