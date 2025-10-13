@@ -12,13 +12,11 @@ void update_opcontrol();
 
 // If you want to command these directly from other code, these helper APIs are provided
 void spin_high_goal(int velocity);
-void spin_middle_goal(int velocity);
 void spin_intake(int velocity);
 void spin_indexer(int velocity);
 
 // Motors (externs) - you can use these directly if needed. Definitions live in subsystems.cpp
 extern pros::Motor high_goal_motor;
-extern pros::Motor middle_goal_motor;
 extern pros::Motor intake_motor;
 extern pros::Motor indexer_motor;
 }  // namespace subsystems

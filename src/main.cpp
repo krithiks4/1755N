@@ -6,9 +6,8 @@
 // are intended to be edited by you; manipulators.cpp provides sensible
 // fallbacks if you don't update them here.
 #define MOTOR_HIGH_GOAL_PORT 1   // green motor - high goal (clockwise)
-#define MOTOR_MIDDLE_GOAL_PORT 2 // green motor - middle goal (counterclockwise)
-#define MOTOR_INTAKE_PORT 3    // intake smart motor
-#define MOTOR_INDEXER_PORT 11  // indexer smart motor
+#define MOTOR_INTAKE_PORT 3    // intake half(smart) motor
+#define MOTOR_INDEXER_PORT 2  // indexer half(smart) motor
 
 #include "subsystems.hpp"
 
@@ -20,8 +19,8 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {5, 6, 7},     // Left Chassis Ports (negative port will reverse it!)
-    {8, 9, 1},  // Right Chassis Ports (negative port will reverse it!)
+    {13, 12, 11},     // Left Chassis Ports (negative port will reverse it!)
+    {18, 19, 20},  // Right Chassis Ports (negative port will reverse it!)
 
     7,      // IMU Port
     4.125,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
