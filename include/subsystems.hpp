@@ -19,10 +19,8 @@ void spin_indexer(int velocity);
 // Motors (externs) - you can use these directly if needed. Definitions live in subsystems.cpp
 extern pros::Motor high_goal_motor;
 extern pros::Motor middle_goal_motor;
-extern pros::Motor intake_motor_a;
-extern pros::Motor intake_motor_b;
-extern pros::Motor indexer_motor_a;
-extern pros::Motor indexer_motor_b;
+extern pros::Motor intake_motor;
+extern pros::Motor indexer_motor;
 }  // namespace subsystems
 #pragma once
 
