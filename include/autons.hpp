@@ -1,6 +1,7 @@
 #pragma once
 
 void default_constants();
+void pid_tuning_test();
 
 void drive_example();
 void turn_example();

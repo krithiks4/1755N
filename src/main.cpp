@@ -1,15 +1,13 @@
 #include "main.h"
 
-// ------------------------
-// Motor port configuration
-// Update these port numbers to match your robot wiring. These defines
-// are intended to be edited by you; manipulators.cpp provides sensible
-// fallbacks if you don't update them here.
-#define MOTOR_HIGH_GOAL_PORT 1   // green motor - high goal (clockwise)
-#define MOTOR_INTAKE_PORT 3    // intake half(smart) motor
-#define MOTOR_INDEXER_PORT 2  // indexer half(smart) motor
+#define MOTOR_HIGH_GOAL_PORT 1
+#define MOTOR_INTAKE_PORT 3
+#define MOTOR_INDEXER_PORT 2
 
 #include "subsystems.hpp"
+
+// Controller
+pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -19,12 +17,12 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {13, 12, 11},     // Left Chassis Ports (negative port will reverse it!)
+    {-13, -12, -11},     // Left Chassis Ports (negative port will reverse it!)
     {18, 19, 20},  // Right Chassis Ports (negative port will reverse it!)
 
     7,      // IMU Port
-    4.125,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    343);   // Wheel RPM = cartridge * (motor gear / wheel gear)
+  4.125,
+  450);
 
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
@@ -55,10 +53,9 @@ void initialize() {
   //  - ignore this if you aren't using a vertical tracker
   // chassis.odom_tracker_left_set(&vert_tracker);
 
-  // Configure your chassis controls
-  chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
-  chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
-  chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
+  chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
+  chassis.opcontrol_drive_activebrake_set(0.0);
+  chassis.opcontrol_curve_default_set(0.0, 0.0);
 
   // Set the drive to your own constants from autons.cpp!
   default_constants();
@@ -69,6 +66,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"PID Tuning\n\nDrive 24 inches (2 feet) forward", pid_tuning_test},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -85,12 +83,10 @@ void initialize() {
       {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
   });
 
-  // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 
-  // Initialize subsystem (motors, states)
   subsystems::initialize();
 }
 
@@ -222,13 +218,6 @@ void ez_template_extras() {
     if (master.get_digital_new_press(DIGITAL_X))
       chassis.pid_tuner_toggle();
 
-    // Trigger the selected autonomous routine
-    if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
-      pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
-      autonomous();
-      chassis.drive_brake_set(preference);
-    }
-
     // Allow PID Tuner to iterate
     chassis.pid_tuner_iterate();
   }
@@ -254,22 +243,15 @@ void ez_template_extras() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   while (true) {
-    // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
 
-    // chassis.opcontrol_tank();  // Tank control
-    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
-    // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
-    // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
-    // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
+    chassis.opcontrol_arcade_standard(ez::SPLIT);
 
-  // Update subsystem (button handling)
-  subsystems::update_opcontrol();
+    subsystems::update_opcontrol();
 
-    pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+    pros::delay(ez::util::DELAY_TIME);
   }
 }
