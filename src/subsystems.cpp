@@ -21,8 +21,7 @@ pros::Motor subsystems::high_goal_motor(MOTOR_HIGH_GOAL_PORT);
 pros::Motor subsystems::intake_motor(MOTOR_INTAKE_PORT);
 pros::Motor subsystems::indexer_motor(MOTOR_INDEXER_PORT);
 
-// Single pneumatic control (if you have two separate pneumatics, change to different ports like 'A' and 'B')
-pros::adi::DigitalOut subsystems::wall_mech('A', false);
+ez::Piston subsystems::wall_mech('A', false);
 
 namespace subsystems {
 
@@ -85,13 +84,7 @@ void update_opcontrol() {
     spin_indexer(INDEXER_MAX_VEL);
   }
 
-  // Pneumatics toggle control
-  static bool pneumatics_state = false;
-  
-  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-    pneumatics_state = !pneumatics_state;
-    wall_mech.set_value(pneumatics_state);
-  }
+  wall_mech.button_toggle(master.get_digital(pros::E_CONTROLLER_DIGITAL_Y));
 }
 
 }

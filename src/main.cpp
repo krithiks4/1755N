@@ -66,21 +66,14 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"PID Tuning\n\nDrive 24 inches (2 feet) forward", pid_tuning_test},
-      {"Drive\n\nDrive forward and come back", drive_example},
-      {"Turn\n\nTurn 3 times.", turn_example},
-      {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
-      {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
-      {"Swing Turn\n\nSwing in an 'S' curve", swing_example},
-      {"Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
-      {"Combine all 3 movements", combining_movements},
-      {"Interference\n\nAfter driving forward, robot performs differently if interfered or not", interfered_example},
-      {"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
-      {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
-      {"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
-      {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
-      {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+      {"RIGHT SIDE - 1 LONG ONLY\n\nDo long goal on right side", longGoalRight},
+      {"LEFT SIDE - 1 LONG ONLY\n\nDo long goal on left side", longGoalLeft},
+      {"RIGHT SIDE - 1 LONG & 1 MIDDLE\n\nDo long goal on right side\nDo the low middle", rightGoals},
+      {"LEFT SIDE - 1 LONG & 1 MIDDLE\n\nDo long goal on left side\nDo the higher middle", leftGoals},
+      {"RIGHT SIDE - 1 LONG & FULL MIDDLE\n\nDo long goal on right side\nDo both goals in the middle", rightLongGoalFullMiddle},
+      {"LEFT SIDE - 1 LONG & FULL MIDDLE\n\nDo long goal on left side\nDo both goals in the middle", leftLongGoalFullMiddle},
+      {"RIGHT SIDE - ALL\n\nDo all goals starting from the right side", allGoalsRight},
+      {"LEFT SIDE - ALL\n\nDo all goals starting from the left side", allGoalsLeft},
   });
 
   chassis.initialize();
@@ -173,16 +166,10 @@ void ez_screen_task() {
         // If we're on the first blank page...
         if (ez::as::page_blank_is_on(0)) {
           // Display X, Y, and Theta
-          ez::screen_print("x: " + util::to_string_with_precision(chassis.odom_x_get()) +
-                               "\ny: " + util::to_string_with_precision(chassis.odom_y_get()) +
-                               "\na: " + util::to_string_with_precision(chassis.odom_theta_get()),
-                           1);  // Don't override the top Page line
-
-          // Display all trackers that are being used
-          screen_print_tracker(chassis.odom_tracker_left, "l", 4);
-          screen_print_tracker(chassis.odom_tracker_right, "r", 5);
-          screen_print_tracker(chassis.odom_tracker_back, "b", 6);
-          screen_print_tracker(chassis.odom_tracker_front, "f", 7);
+          ez::screen_print(
+            "comp: " + std::to_string(pros::competition::is_connected()) + "\n",
+            1
+          );
         }
       }
     }
@@ -246,11 +233,14 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   while (true) {
-    ez_template_extras();
+    //ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
+    //subsystems::update_opcontrol();
 
-    subsystems::update_opcontrol();
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+      autonomous();
+    }
 
     pros::delay(ez::util::DELAY_TIME);
   }

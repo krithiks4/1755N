@@ -1,19 +1,15 @@
 #pragma once
 
 void default_constants();
-void pid_tuning_test();
 
-void drive_example();
-void turn_example();
-void drive_and_turn();
-void wait_until_change_speed();
-void swing_example();
-void motion_chaining();
-void combining_movements();
-void interfered_example();
-void odom_drive_example();
-void odom_pure_pursuit_example();
-void odom_pure_pursuit_wait_until_example();
-void odom_boomerang_example();
-void odom_boomerang_injected_pure_pursuit_example();
-void measure_offsets();
+void longGoalRight(); // preload + matchload -> long goal on right side
+void longGoalLeft(); // preload + matchload -> long goal on left side
+
+void rightGoals(); // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal
+void leftGoals(); // preload+matchload -> long goal on left side -> pick up middle 3 -> middle goal
+
+void rightLongGoalFullMiddle(); // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal -> middle goal
+void leftLongGoalFullMiddle(); // preload+matchload -> long goal on left side -> pick up middle 3 -> middle goal -> low goal
+
+void allGoalsRight(); // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal -> pick up left side middle 3 -> left side long goal
+void allGoalsLeft(); // preload+matchload -> long goal on left side -> pick up middle 3 -> middle goal -> pick up right side middle 3 -> right side long goal
