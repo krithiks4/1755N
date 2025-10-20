@@ -59,13 +59,15 @@ void longGoalRight() {
 
   subsystems::wall_mech.set(true);
 
+  // TODO: Spin motors to intake here
+
   chassis.pid_drive_set(5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
   chassis.pid_drive_set(-24_in, DRIVE_SPEED);
   subsystems::wall_mech.set(false);
   chassis.pid_wait();
 
-  // TODO: Score high goal here
+  // TODO: Spin motors to score long goal here
 }
 
 // preload + matchload -> long goal on left side
@@ -78,13 +80,15 @@ void longGoalLeft() {
 
   subsystems::wall_mech.set(true);
 
+  // TODO: Spin motors to intake here
+
   chassis.pid_drive_set(5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
   chassis.pid_drive_set(-24_in, DRIVE_SPEED);
   subsystems::wall_mech.set(false);
   chassis.pid_wait();
 
-  // TODO: Score high goal here
+  // TODO: Spin motors to score long goal here
 }
 
 // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal
