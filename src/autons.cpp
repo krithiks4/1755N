@@ -57,17 +57,19 @@ void longGoalRight() {
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  subsystems::wall_mech.set(true);
-
-  // TODO: Spin motors to intake here
+  will_mech.set(true);
+  sprockets.set_intake_and_move(true);
 
   chassis.pid_drive_set(5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
   chassis.pid_drive_set(-24_in, DRIVE_SPEED);
-  subsystems::wall_mech.set(false);
+
+  will_mech.set(false);
+  sprockets.set_intake_and_move(false);
+
   chassis.pid_wait();
 
-  // TODO: Spin motors to score long goal here
+  sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
 }
 
 // preload + matchload -> long goal on left side
@@ -78,17 +80,19 @@ void longGoalLeft() {
   chassis.pid_turn_set(90_deg, TURN_SPEED); // Change -90 to +90 for left side
   chassis.pid_wait();
 
-  subsystems::wall_mech.set(true);
-
-  // TODO: Spin motors to intake here
+  will_mech.set(true);
+  sprockets.set_intake_and_move(true);
 
   chassis.pid_drive_set(5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
   chassis.pid_drive_set(-24_in, DRIVE_SPEED);
-  subsystems::wall_mech.set(false);
+
+  will_mech.set(false);
+  sprockets.set_intake_and_move(false);
+
   chassis.pid_wait();
 
-  // TODO: Spin motors to score long goal here
+  sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
 }
 
 // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal

@@ -6,23 +6,22 @@
 
 #include "subsystems.hpp"
 
-// Controller
-pros::Controller master(pros::E_CONTROLLER_MASTER);
-
-/////
-// For installation, upgrading, documentations, and tutorials, check out our website!
-// https://ez-robotics.github.io/EZ-Template/
-/////
-
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-13, -12, -11},     // Left Chassis Ports (negative port will reverse it!)
+    {-13, -12, -11}, // Left Chassis Ports (negative port will reverse it!)
     {18, 19, 20},  // Right Chassis Ports (negative port will reverse it!)
 
     7,      // IMU Port
-  4.125,
-  450);
+    4.125,
+    450
+);
+
+Sprockets sprockets(
+  3, // Intake port
+  2, // Indexer port
+  1  // High goal port
+);
 
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
@@ -79,8 +78,6 @@ void initialize() {
   chassis.initialize();
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
-
-  subsystems::initialize();
 }
 
 /**
@@ -198,6 +195,10 @@ void ez_template_extras() {
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
 
+    if (master.get_digital_new_press(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
+      autonomous();
+    }
+
     // Enable / Disable PID Tuner
     //  When enabled:
     //  * use A and Y to increment / decrement the constants
@@ -233,14 +234,10 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   while (true) {
-    //ez_template_extras();
+    ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
-    //subsystems::update_opcontrol();
-
-    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-      autonomous();
-    }
+    sprockets.opcontrol();
 
     pros::delay(ez::util::DELAY_TIME);
   }
