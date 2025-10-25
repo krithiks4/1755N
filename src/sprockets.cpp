@@ -1,3 +1,4 @@
+#include "main.h"
 #include "sprockets.hpp"
 
 void Sprockets::move() {
