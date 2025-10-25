@@ -195,10 +195,6 @@ void ez_template_extras() {
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
 
-    if (master.get_digital_new_press(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
-      autonomous();
-    }
-
     // Enable / Disable PID Tuner
     //  When enabled:
     //  * use A and Y to increment / decrement the constants

@@ -7,8 +7,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #pragma once
 
 #include "main.h"
-#include "EZ-Template/api.hpp"
-#include "api.h"
 
 extern Drive chassis;
 extern Sprockets sprockets;
