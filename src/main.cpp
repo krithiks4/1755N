@@ -4,8 +4,6 @@
 #define MOTOR_INTAKE_PORT 3
 #define MOTOR_INDEXER_PORT 2
 
-#include "subsystems.hpp"
-
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
