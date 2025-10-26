@@ -7,6 +7,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #pragma once
 
 void default_constants();
+void pid_tuning_test();
 
 void longGoalRight(); // preload + matchload -> long goal on right side
 void longGoalLeft(); // preload + matchload -> long goal on left side

@@ -2,12 +2,6 @@
 #include "sprockets.hpp"
 
 void Sprockets::move() {
-    if (intake_running) {
-        intake_motor.move(-SPROCKET_VOLTAGE);
-    } else {
-        intake_motor.brake();
-    }
-    
     switch (state) {
         case State::LOW_GOAL:
             intake_motor.move(SPROCKET_VOLTAGE);
@@ -29,11 +23,16 @@ void Sprockets::move() {
             break;
         case State::NONE:
         default:
-            intake_motor.brake();
             low_motor.brake();
             middle_motor.brake();
             high_motor.brake();
             break;
+    }
+
+    if (intake_running) {
+        intake_motor.move(-SPROCKET_VOLTAGE);
+    } else {
+        if (state == State::NONE) intake_motor.brake();
     }
 }
 
