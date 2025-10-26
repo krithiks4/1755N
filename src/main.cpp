@@ -17,8 +17,9 @@ ez::Drive chassis(
 
 Sprockets sprockets(
   3, // Intake port
-  2, // Indexer port
-  1  // High goal port
+  2, // Low sprocket
+  16, // Middle sprokets
+  1 // High goal outtake
 );
 
 // Uncomment the trackers you're using here!
@@ -228,10 +229,12 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   while (true) {
-    ez_template_extras();
+    // ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     sprockets.opcontrol();
+
+    will_mech.button_toggle(master.get_digital(DIGITAL_B));
 
     pros::delay(ez::util::DELAY_TIME);
   }

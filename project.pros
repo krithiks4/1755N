@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "N_code",
+    "project_name": "statemachine",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -425,7 +425,8 @@
     },
     "upload_options": {
       "description": "i am become gone",
-      "icon": "planet"
+      "icon": "planet",
+      "slot": 2
     },
     "use_early_access": false
   }

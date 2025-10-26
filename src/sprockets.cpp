@@ -2,30 +2,38 @@
 #include "sprockets.hpp"
 
 void Sprockets::move() {
+    if (intake_running) {
+        intake_motor.move(-SPROCKET_VOLTAGE);
+    } else {
+        intake_motor.brake();
+    }
+    
     switch (state) {
         case State::LOW_GOAL:
-            indexer_motor.move_voltage(SPROCKET_VOLTAGE);
-            high_goal_motor.move_voltage(0);
+            intake_motor.move(SPROCKET_VOLTAGE);
+            low_motor.move(-SPROCKET_VOLTAGE);
+            middle_motor.move(SPROCKET_VOLTAGE);
+            high_motor.brake();
             break;
         case State::MIDDLE_GOAL:
-            indexer_motor.move_voltage(SPROCKET_VOLTAGE);
-            high_goal_motor.move_voltage(SPROCKET_VOLTAGE);
+            intake_motor.move(-SPROCKET_VOLTAGE);
+            low_motor.move(SPROCKET_VOLTAGE);
+            middle_motor.move(SPROCKET_VOLTAGE);
+            high_motor.move(-SPROCKET_VOLTAGE);
             break;
         case State::HIGH_GOAL:
-            indexer_motor.move_voltage(SPROCKET_VOLTAGE);
-            high_goal_motor.move_voltage(-SPROCKET_VOLTAGE);
+            intake_motor.move(-SPROCKET_VOLTAGE);
+            low_motor.move(SPROCKET_VOLTAGE);
+            middle_motor.move(-SPROCKET_VOLTAGE);
+            high_motor.move(SPROCKET_VOLTAGE);
             break;
         case State::NONE:
         default:
-            indexer_motor.brake();
-            high_goal_motor.brake();
+            intake_motor.brake();
+            low_motor.brake();
+            middle_motor.brake();
+            high_motor.brake();
             break;
-    }
-    
-    if (intake_running) {
-        intake_motor.move_voltage(SPROCKET_VOLTAGE);
-    } else {
-        intake_motor.brake();
     }
 }
 
@@ -48,17 +56,17 @@ void Sprockets::set_intake_and_move(bool running) {
 }
 
 void Sprockets::opcontrol() {
-    if (master.get_digital(DIGITAL_A)) {
+    if (master.get_digital(DIGITAL_R1)) {
         set_intake(true);
     } else {
         set_intake(false);
     }
 
-    if (master.get_digital_new_press(DIGITAL_UP)) {
+    if (master.get_digital(DIGITAL_L1)) {
         set_state(State::HIGH_GOAL);
-    } else if (master.get_digital_new_press(DIGITAL_RIGHT)) {
+    } else if (master.get_digital(DIGITAL_L2)) {
         set_state(State::MIDDLE_GOAL);
-    } else if (master.get_digital_new_press(DIGITAL_DOWN)) {
+    } else if (master.get_digital(DIGITAL_R2)) {
         set_state(State::LOW_GOAL);
     } else {
         set_state(State::NONE);

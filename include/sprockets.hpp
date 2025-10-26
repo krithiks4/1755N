@@ -22,15 +22,16 @@ class Sprockets {
         State state = State::NONE;
         
         pros::Motor intake_motor;
-        pros::Motor indexer_motor;
-        pros::Motor high_goal_motor;
+        pros::Motor low_motor;
+        pros::Motor middle_motor;
+        pros::Motor high_motor;
 
         const int SPROCKET_VOLTAGE = 127;
 
         void move();
     public:
-        Sprockets(int intake_port, int indexer_port, int high_goal_port)
-            : intake_motor(intake_port), indexer_motor(indexer_port), high_goal_motor(high_goal_port) {};
+        Sprockets(int intake_port, int low_port, int middle_port, int high_port)
+            : intake_motor(intake_port), low_motor(low_port), middle_motor(middle_port), high_motor(high_port) {};
 
         void set_state(State state);
         void set_state_and_move(State state);
