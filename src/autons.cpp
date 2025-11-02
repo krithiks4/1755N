@@ -3,7 +3,7 @@
 
 // These are out of 127
 const int DRIVE_SPEED = 110;
-const int TURN_SPEED = 90;
+const int TURN_SPEED = 40;
 const int SWING_SPEED = 110;
 
 ///
@@ -52,25 +52,34 @@ void pid_tuning_test() {
 
 // preload + matchload -> long goal on right side
 void longGoalRight() {
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, false, true);
+  chassis.pid_drive_set(38_in, DRIVE_SPEED, false, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(87_deg, TURN_SPEED);
   chassis.pid_wait();
 
   will_mech.set(true);
-  sprockets.set_intake_and_move(true);
+  sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
-  chassis.pid_drive_set(5_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+  chassis.pid_drive_set(10_in, DRIVE_SPEED);
 
-  will_mech.set(false);
-  sprockets.set_intake_and_move(false);
+  for (int i = 0; i < 2; i++)
+  {
+    chassis.pid_drive_set(8_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-8_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+  }
 
-  chassis.pid_wait();
+  // chassis.pid_drive_set(-24_in, DRIVE_SPEED);
 
-  sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
+  // will_mech.set(false);
+  // sprockets.set_state_and_move(Sprockets::State::NONE);
+
+  // chassis.pid_wait();
+
+  // sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
+  // pros::delay(2000);
 }
 
 // preload + matchload -> long goal on left side
@@ -78,18 +87,18 @@ void longGoalLeft() {
   chassis.pid_drive_set(24_in, DRIVE_SPEED, false, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED); // Change -90 to +90 for left side
+  chassis.pid_turn_set(-90_deg, TURN_SPEED); // Change -90 to +90 for left side
   chassis.pid_wait();
 
   will_mech.set(true);
-  sprockets.set_intake_and_move(true);
+  sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
   chassis.pid_drive_set(5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
   chassis.pid_drive_set(-24_in, DRIVE_SPEED);
 
   will_mech.set(false);
-  sprockets.set_intake_and_move(false);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 
   chassis.pid_wait();
 

@@ -191,6 +191,10 @@ pros::Task ezScreenTask(ez_screen_task);
 void ez_template_extras() {
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
+
+    if (master.get_digital_new_press(DIGITAL_DOWN) && master.get_digital(DIGITAL_Y)) {
+      autonomous();
+    }
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
 
@@ -229,7 +233,7 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   while (true) {
-    // ez_template_extras();
+    ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     sprockets.opcontrol();
