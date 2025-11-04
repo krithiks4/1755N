@@ -52,7 +52,7 @@ void pid_tuning_test() {
 
 // preload + matchload -> long goal on right side
 void longGoalRight() {
-  chassis.pid_drive_set(38_in, DRIVE_SPEED);
+  chassis.pid_drive_set(32.5_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   chassis.pid_turn_set(90_deg, TURN_SPEED);
@@ -72,19 +72,20 @@ void longGoalRight() {
     chassis.pid_wait_quick();
   }
 
-  // chassis.pid_drive_set(-24_in, DRIVE_SPEED);
-  // chassis.pid_wait();
+  sprockets.set_state_and_move(Sprockets::State::NONE);)
 
-  // will_mech.set(false);
-  // sprockets.set_state_and_move(Sprockets::State::NONE);
+  chassis.pid_drive_set(-27.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
 
-  // sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
-  // pros::delay(2000);
+  will_mech.set(false);
+
+  sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
+  pros::delay(2000);
 }
 
 // preload + matchload -> long goal on left side
 void longGoalLeft() {
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, false, true);
+  chassis.pid_drive_set(32.5_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
@@ -93,30 +94,66 @@ void longGoalLeft() {
   will.set(true);
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
-  chassis.pid_drive_set(5_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(-24_in, DRIVE_SPEED);
-
-  will.set(false);
-  sprockets.set_state_and_move(Sprockets::State::NONE);
-
+  chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
+  for (int i = 0; i < 2; i++)
+  {
+    chassis.pid_drive_set(8_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-8_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+  }
+
+  sprockets.set_state_and_move(Sprockets::State::NONE);)
+
+  chassis.pid_drive_set(-27.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  will_mech.set(false);
+
   sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
+  pros::delay(2000);
 }
 
 // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal
 void rightGoals() {
   longGoalRight();
 
-  // TODO: Proceed to do middle
+  chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  sprockets.set_state_and_move(Sprockets::State::INTAKE);
+
+  chassis.pid_drive_set(32_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+  chassis.pid_drive_set(17.5_in, DRIVE_SPEED);
+
+  sprockets.set_state_and_move(Sprockets::State::MIDDLE_GOAL);
+  pros::delay(2000);
 }
 
 // preload+matchload -> long goal on left side -> pick up middle 3 -> middle goal
 void leftGoals() {
   longGoalLeft();
 
-  // TODO: Proceed to do middle
+  chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  sprockets.set_state_and_move(Sprockets::State::INTAKE);
+
+  chassis.pid_drive_set(32_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+  chassis.pid_drive_set(17.5_in, DRIVE_SPEED);
+
+  sprockets.set_state_and_move(Sprockets::State::MIDDLE_GOAL);
+  pros::delay(2000);
 }
 
 // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal -> middle goal
