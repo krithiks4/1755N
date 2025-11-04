@@ -1,5 +1,14 @@
 #include "main.h"
 
+/*
+ * Authored by the single and only Ethan "Goon" Chen
+ * Who is ethan chen?
+ * Ethan chen is the legend who single-handedly built 1755N from the ground up
+ * He is also a fantastic programmer and an even more fantastic person
+ * If you see him, be sure to thank him for all his hard work!
+ * - Goon
+ */
+
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
@@ -68,6 +77,7 @@ void initialize() {
       {"LEFT SIDE - 1 LONG & FULL MIDDLE\n\nDo long goal on left side\nDo both goals in the middle", leftLongGoalFullMiddle},
       {"RIGHT SIDE - ALL\n\nDo all goals starting from the right side", allGoalsRight},
       {"LEFT SIDE - ALL\n\nDo all goals starting from the left side", allGoalsLeft},
+      {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
   });
 
   chassis.initialize();
@@ -157,9 +167,10 @@ void ez_screen_task() {
       if (chassis.odom_enabled() && !chassis.pid_tuner_enabled()) {
         // If we're on the first blank page...
         if (ez::as::page_blank_is_on(0)) {
-          // Display X, Y, and Theta
+          // Display debug information
           ez::screen_print(
-            "comp: " + std::to_string(pros::competition::is_connected()) + "\n",
+            "comp: " + std::to_string(pros::competition::is_connected()) + "\n" +
+            "Ethan \"Goon\" Chen",
             1
           );
         }
@@ -187,6 +198,10 @@ pros::Task ezScreenTask(ez_screen_task);
 void ez_template_extras() {
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
+
+    if (master.get_digital_new_press(DIGITAL_DOWN) && master.get_digital(DIGITAL_RIGHT))
+      autonomous();
+    
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
 
@@ -225,13 +240,13 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
   while (true) {
-    // ez_template_extras();
+    ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     sprockets.opcontrol();
 
-    will_mech.button_toggle(master.get_digital(DIGITAL_B));
-
+    will.button_toggle(master.get_digital(DIGITAL_B));
+    
     pros::delay(ez::util::DELAY_TIME);
   }
 }
