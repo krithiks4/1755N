@@ -1,9 +1,5 @@
 #include "main.h"
 
-#define MOTOR_HIGH_GOAL_PORT 1
-#define MOTOR_INTAKE_PORT 3
-#define MOTOR_INDEXER_PORT 2
-
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
