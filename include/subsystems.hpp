@@ -1,9 +1,3 @@
-/*
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at http://mozilla.org/MPL/2.0/.
-*/
-
 #pragma once
 
 #include "main.h"
@@ -11,4 +5,4 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 extern Drive chassis;
 extern Sprockets sprockets;
 
-inline ez::Piston will_mech('A', false);
+inline ez::Piston will('A', false);

@@ -11,9 +11,9 @@ const int SWING_SPEED = 110;
 ///
 void default_constants() {
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(10.0, 0.0, 0.0);         // Fwd/rev constants, used for odom and non odom motions
-  chassis.pid_heading_constants_set(3.0, 0.0, 10.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(3.0, 0.0, 20.0, 0.0);     // Turn in place constants
+  chassis.pid_drive_constants_set(8.0, 2.30, 7.0);         // Fwd/rev constants, used for odom and non odom motions
+  chassis.pid_heading_constants_set(6.0, 1.0, 8.0);        // Holds the robot straight while going forward without odom
+  chassis.pid_turn_constants_set(6.0, 2.0, 8.0, 0);     // Turn in place constants
   chassis.pid_swing_constants_set(5.0, 0.0, 30.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(4.0, 0.0, 40.0);    // Angular control for odom motions
   chassis.pid_odom_boomerang_constants_set(4.0, 0.0, 30.0);  // Angular control for boomerang motions
@@ -46,22 +46,23 @@ void default_constants() {
 
 void pid_tuning_test() {
   // Drive 24 inches (2 feet) forward for PID tuning
-  chassis.pid_drive_set(24_in, DRIVE_SPEED);
+  chassis.pid_turn_set(90_deg, DRIVE_SPEED);
   chassis.pid_wait();
 }
 
 // preload + matchload -> long goal on right side
 void longGoalRight() {
-  chassis.pid_drive_set(38_in, DRIVE_SPEED, false, true);
+  chassis.pid_drive_set(38_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(87_deg, TURN_SPEED);
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  will_mech.set(true);
+  will.set(true);
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
   chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_wait();
 
   for (int i = 0; i < 2; i++)
   {
@@ -72,11 +73,10 @@ void longGoalRight() {
   }
 
   // chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+  // chassis.pid_wait();
 
   // will_mech.set(false);
   // sprockets.set_state_and_move(Sprockets::State::NONE);
-
-  // chassis.pid_wait();
 
   // sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
   // pros::delay(2000);
@@ -87,17 +87,17 @@ void longGoalLeft() {
   chassis.pid_drive_set(24_in, DRIVE_SPEED, false, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-90_deg, TURN_SPEED); // Change -90 to +90 for left side
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  will_mech.set(true);
+  will.set(true);
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
   chassis.pid_drive_set(5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
   chassis.pid_drive_set(-24_in, DRIVE_SPEED);
 
-  will_mech.set(false);
+  will.set(false);
   sprockets.set_state_and_move(Sprockets::State::NONE);
 
   chassis.pid_wait();
