@@ -80,7 +80,8 @@ void longGoalRight() {
   will.set(false);
 
   sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
-  pros::delay(2000);
+  pros::delay(4000);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 // preload + matchload -> long goal on left side
@@ -94,7 +95,7 @@ void longGoalLeft() {
   will.set(true);
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   for (int i = 0; i < 2; i++)
@@ -113,47 +114,64 @@ void longGoalLeft() {
   will.set(false);
 
   sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
-  pros::delay(2000);
+  pros::delay(4000);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal
 void rightGoals() {
   longGoalRight();
 
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+  chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
   chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
   chassis.pid_drive_set(32_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(17.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  sprockets.set_state_and_move(Sprockets::State::NONE);
+
+  chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::MIDDLE_GOAL);
-  pros::delay(2000);
+  pros::delay(4000);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 // preload+matchload -> long goal on left side -> pick up middle 3 -> middle goal
 void leftGoals() {
   longGoalLeft();
 
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+  chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
   chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
   chassis.pid_drive_set(32_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(17.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  sprockets.set_state_and_move(Sprockets::State::NONE);
+
+  chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::LOW_GOAL);
-  pros::delay(2000);
+  pros::delay(4000);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal -> middle goal
