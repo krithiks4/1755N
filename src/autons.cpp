@@ -61,7 +61,7 @@ void longGoalRight() {
   will.set(true);
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   for (int i = 0; i < 2; i++)
@@ -152,7 +152,7 @@ void leftGoals() {
   chassis.pid_wait_quick();
   chassis.pid_drive_set(17.5_in, DRIVE_SPEED);
 
-  sprockets.set_state_and_move(Sprockets::State::MIDDLE_GOAL);
+  sprockets.set_state_and_move(Sprockets::State::LOW_GOAL);
   pros::delay(2000);
 }
 

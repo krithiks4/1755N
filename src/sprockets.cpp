@@ -22,6 +22,7 @@ void Sprockets::move() {
             high_motor.move(SPROCKET_VOLTAGE);
             break;
         case State::INTAKE:
+            // TODO: Use pros::Motor.torque() to stop each motor when they fill up
             intake_motor.move(-SPROCKET_VOLTAGE);
             low_motor.move(SPROCKET_VOLTAGE);
             middle_motor.move(-SPROCKET_VOLTAGE / 3);

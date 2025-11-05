@@ -18,14 +18,13 @@ class Sprockets {
             MIDDLE_GOAL,
             HIGH_GOAL
         };
-    private:
-        bool intake_running = false;
-        State state = State::NONE;
-        
+
         pros::Motor intake_motor;
         pros::Motor low_motor;
         pros::Motor middle_motor;
         pros::Motor high_motor;
+    private:
+        State state = State::NONE;
 
         const int SPROCKET_VOLTAGE = 127;
 
