@@ -170,9 +170,9 @@ void ez_screen_task() {
           // Display debug information
           ez::screen_print(
             "comp: " + std::to_string(pros::competition::is_connected()) + "\n" +
-            "Intake Motor Torque: " + std::to_string(sprockets.intake_motor.get_torque()) + " Nm\n" + 
-            "Low Motor Torque: " + std::to_string(sprockets.low_motor.get_torque()) + " Nm\n" + 
-            "Middle Motor Torque: " + std::to_string(sprockets.middle_motor.get_torque()) + " Nm\n" +
+            "Intake Motor Torque: " + std::to_string(sprockets.intake_motor.get_torque() > 0.5) + " Nm\n" + 
+            "Low Motor Torque: " + std::to_string(sprockets.low_motor.get_torque() > 0.5) + " Nm\n" + 
+            "Middle Motor Torque: " + std::to_string(sprockets.middle_motor.get_torque() > 0.5) + " Nm\n" +
             "Ethan \"Goon\" Chen",
             1
           );
