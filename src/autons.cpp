@@ -2,7 +2,7 @@
 #include "autons.hpp"
 
 // These are out of 127
-const int DRIVE_SPEED = 110;
+const int DRIVE_SPEED = 10; //110;
 const int TURN_SPEED = 40;
 const int SWING_SPEED = 110;
 
@@ -84,7 +84,7 @@ static void longGoalBase() {
   will.set(false);
 
   sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
-  pros::delay(4000);
+  pros::delay(2000);
   sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
@@ -104,20 +104,12 @@ static void sideGoalsBase() {
   chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_turn_relative_set(135_deg, TURN_SPEED);
+  chassis.pid_turn_relative_set(315_deg, TURN_SPEED);
   chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
   chassis.pid_drive_set(32_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  sprockets.set_state_and_move(Sprockets::State::NONE);
-
-  chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
   chassis.pid_wait();
 }
 
@@ -126,8 +118,16 @@ void rightGoals() {
   longGoalRight(); 
   sideGoalsBase();
 
+  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  sprockets.set_state_and_move(Sprockets::State::NONE);  
+
+  chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
   sprockets.set_state_and_move(Sprockets::State::MIDDLE_GOAL);
-  pros::delay(4000);
+  pros::delay(1000);
   sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
@@ -137,8 +137,13 @@ void leftGoals() {
   longGoalLeft();
   sideGoalsBase();
 
+  sprockets.set_state_and_move(Sprockets::State::NONE);  
+
+  chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
   sprockets.set_state_and_move(Sprockets::State::LOW_GOAL);
-  pros::delay(4000);
+  pros::delay(1000);
   sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
