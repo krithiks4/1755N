@@ -58,6 +58,8 @@ static void flipThetaIfNotAlreadyFlipped() {
 static void longGoalBase() {
   chassis.pid_drive_set(38.5_in, DRIVE_SPEED);
   chassis.pid_wait();
+  chassis.pid_drive_set(-0.25_in, DRIVE_SPEED);
+  chassis.pid_wait();
 
   // will.set(true);
   chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
@@ -79,7 +81,7 @@ static void longGoalBase() {
 
   // sprockets.set_state_and_move(Sprockets::State::NONE);
 
-  chassis.pid_drive_set(-32_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-30.5_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   // will.set(false);
@@ -101,27 +103,31 @@ void longGoalLeft() {
 }
 
 // rightGoals, but without ending
-static void sideGoalsBase() {
-  chassis.pid_drive_set(12_in, DRIVE_SPEED);
+static void sideGoalsBase(bool isRight) {
+  chassis.pid_drive_set(13_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_turn_relative_set(310_deg, TURN_SPEED);
+  chassis.pid_turn_relative_set(311.5_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
+  if (isRight) {
+    chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
+    chassis.pid_wait();
+  }
 
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
   chassis.pid_drive_set(32_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-  pros::delay(400);
-  sprockets.set_state_and_move(Sprockets::State::NONE);
+  chassis.pid_wait_quick_chain();
+  if (isRight) {
+    pros::delay(400);
+    sprockets.set_state_and_move(Sprockets::State::NONE);
+  }
 }
 
 // preload+matchload -> long goal on right side -> pick up middle 3 -> low goal
 void rightGoals() {
-  longGoalRight(); 
-  sideGoalsBase();
+  longGoalRight();
+  sideGoalsBase(true);
 
   chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -138,12 +144,12 @@ void rightGoals() {
 void leftGoals() {
   flipThetaIfNotAlreadyFlipped();
   longGoalLeft();
-  sideGoalsBase();
+  sideGoalsBase(false);
 
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
-  chassis.pid_drive_set(-24.1_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  chassis.pid_drive_set(25_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
 
   sprockets.set_state_and_move(Sprockets::State::LOW_GOAL);
   pros::delay(3000);
