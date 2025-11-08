@@ -91,7 +91,7 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {
-  // . . .
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 /**
@@ -241,6 +241,7 @@ void ez_template_extras() {
  */
 void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 
   while (true) {
     ez_template_extras();

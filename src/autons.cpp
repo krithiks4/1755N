@@ -2,7 +2,7 @@
 #include "autons.hpp"
 
 // These are out of 127
-const int DRIVE_SPEED = 110;
+const int DRIVE_SPEED = 127;
 const int TURN_SPEED = 40;
 const int SWING_SPEED = 110;
 
@@ -56,55 +56,66 @@ static void flipThetaIfNotAlreadyFlipped() {
 
 // longGoalRight
 static void longGoalBase() {
-  chassis.pid_drive_set(32.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(38.5_in, DRIVE_SPEED);
   chassis.pid_wait();
 
+  // will.set(true);
   chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  will.set(true);
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
 
-  chassis.pid_drive_set(12_in, DRIVE_SPEED);
+  chassis.pid_drive_set(8_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  for (int i = 0; i < 2; i++)
-  {
-    chassis.pid_drive_set(8_in, DRIVE_SPEED);
-    chassis.pid_wait_quick();
-    chassis.pid_drive_set(-8_in, DRIVE_SPEED);
-    chassis.pid_wait_quick();
-  }
+  // for (int i = 0; i < 3; i++)
+  // {
+  //   chassis.pid_drive_set(7_in, 127);
+  //   pros::delay(300);
+  //   chassis.pid_drive_set(-7_in, 127);
+  //   pros::delay(300);
+  // }
+  // chassis.pid_drive_set(0_in, DRIVE_SPEED);
 
   sprockets.set_state_and_move(Sprockets::State::NONE);
 
-  chassis.pid_drive_set(-27.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-30_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  will.set(false);
+  // will.set(false);
 
   sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
-  pros::delay(2000);
+  pros::delay(1000);
   sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 // preload + matchload -> long goal on right side
 void longGoalRight() {
   longGoalBase();
+
+  sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
+  pros::delay(3000);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 // preload + matchload -> long goal on left side
 void longGoalLeft() {
   flipThetaIfNotAlreadyFlipped();
   longGoalBase();
+
+  sprockets.set_state_and_move(Sprockets::State::HIGH_GOAL);
+  pros::delay(3000);
+  sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
 // rightGoals, but without ending
 static void sideGoalsBase() {
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   chassis.pid_turn_relative_set(315_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::INTAKE);
@@ -123,11 +134,11 @@ void rightGoals() {
 
   sprockets.set_state_and_move(Sprockets::State::NONE);  
 
-  chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-20_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::MIDDLE_GOAL);
-  pros::delay(1000);
+  pros::delay(3000);
   sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
@@ -139,11 +150,11 @@ void leftGoals() {
 
   sprockets.set_state_and_move(Sprockets::State::NONE);  
 
-  chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-20_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   sprockets.set_state_and_move(Sprockets::State::LOW_GOAL);
-  pros::delay(1000);
+  pros::delay(3000);
   sprockets.set_state_and_move(Sprockets::State::NONE);
 }
 
