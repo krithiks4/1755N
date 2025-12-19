@@ -78,21 +78,37 @@ void intake_test() {
 }
 
 void odom_test() {
+  // Reset odometry position
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
   
-  // Drive in a square using odometry
-  chassis.pid_odom_set(24_in, 0_in, 0_deg, DRIVE_SPEED, true);
+  // Simple odometry test - drive forward and display position
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_odom_set(24_in, 24_in, 90_deg, DRIVE_SPEED, true);
+  pros::delay(1000);
+  
+  // Turn 90 degrees and drive again
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_odom_set(0_in, 24_in, 180_deg, DRIVE_SPEED, true);
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_odom_set(0_in, 0_in, 270_deg, DRIVE_SPEED, true);
+  pros::delay(1000);
+  
+  // Return to start
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_odom_set(0_in, 0_in, 0_deg, DRIVE_SPEED, true);
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  
+  chassis.pid_turn_set(270_deg, TURN_SPEED);
+  chassis.pid_wait();
+  
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 }
