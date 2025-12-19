@@ -9,32 +9,31 @@
  * - Goon
  */
 
+// ===== CHASSIS CONFIGURATION =====
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-13, -12, -11}, // Left Chassis Ports (negative port will reverse it!)
-    {18, 19, 20},  // Right Chassis Ports (negative port will reverse it!)
+    {-1, -2, -3}, // Left Chassis Ports (negative port will reverse it!)
+    {4, 5, 6},  // Right Chassis Ports (negative port will reverse it!)
 
     7,      // IMU Port
-    4.125,
-    450
+    4.125,  // Wheel diameter
+    450     // Cartridge RPM
 );
 
-Sprockets sprockets(
-  3, // Intake port
-  2, // Low sprocket
-  16, // Middle sprokets
-  1 // High goal outtake
-);
+// ===== SUBSYSTEMS =====
+// 2 motor intake group spinning same direction
+Intake intake({11, 12});
 
-// Uncomment the trackers you're using here!
-// - `8` and `9` are smart ports (making these negative will reverse the sensor)
+// ===== ODOMETRY TRACKING WHEELS =====
+// - `13` and `14` are smart ports (making these negative will reverse the sensor)
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels (horizontal)
+ez::tracking_wheel vert_tracker(14, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels (vertical)
 
+// ===== INITIALIZATION =====
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -49,12 +48,10 @@ void initialize() {
 
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
-  //  - ignore this if you aren't using a horizontal tracker
-  // chassis.odom_tracker_back_set(&horiz_tracker);
+  chassis.odom_tracker_back_set(&horiz_tracker);
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
-  //  - ignore this if you aren't using a vertical tracker
-  // chassis.odom_tracker_left_set(&vert_tracker);
+  chassis.odom_tracker_left_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
   chassis.opcontrol_drive_activebrake_set(0.0);
@@ -69,14 +66,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"RIGHT SIDE - 1 LONG ONLY\n\nDo long goal on right side", longGoalRight},
-      {"LEFT SIDE - 1 LONG ONLY\n\nDo long goal on left side", longGoalLeft},
-      {"RIGHT SIDE - 1 LONG & 1 MIDDLE\n\nDo long goal on right side\nDo the low middle", rightGoals},
-      {"LEFT SIDE - 1 LONG & 1 MIDDLE\n\nDo long goal on left side\nDo the higher middle", leftGoals},
-      {"RIGHT SIDE - 1 LONG & FULL MIDDLE\n\nDo long goal on right side\nDo both goals in the middle", rightLongGoalFullMiddle},
-      {"LEFT SIDE - 1 LONG & FULL MIDDLE\n\nDo long goal on left side\nDo both goals in the middle", leftLongGoalFullMiddle},
-      {"RIGHT SIDE - ALL\n\nDo all goals starting from the right side", allGoalsRight},
-      {"LEFT SIDE - ALL\n\nDo all goals starting from the left side", allGoalsLeft},
+      {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
+      {"TURN TEST\n\nTurn 90 degrees", turn_test},
+      {"INTAKE TEST\n\nRun intake for 3 seconds", intake_test},
+      {"ODOM TEST\n\nTest odometry movement", odom_test},
       {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
   });
 
@@ -85,13 +78,14 @@ void initialize() {
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
 
+// ===== COMPETITION FUNCTIONS =====
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
 void disabled() {
-  sprockets.set_state_and_move(Sprockets::State::NONE);
+  intake.set_state_and_move(Intake::State::NONE);
 }
 
 /**
@@ -170,10 +164,10 @@ void ez_screen_task() {
           // Display debug information
           ez::screen_print(
             "comp: " + std::to_string(pros::competition::is_connected()) + "\n" +
-            "Intake Motor Torque: " + std::to_string(sprockets.intake_motor.get_torque()) + " Nm\n" + 
-            "Low Motor Torque: " + std::to_string(sprockets.low_motor.get_torque()) + " Nm\n" + 
-            "Middle Motor Torque: " + std::to_string(sprockets.middle_motor.get_torque()) + " Nm\n" +
-            "Ethan \"Goon\" Chen",
+            "X: " + std::to_string(chassis.odom_x_get()) + "\n" +
+            "Y: " + std::to_string(chassis.odom_y_get()) + "\n" +
+            "Theta: " + std::to_string(chassis.odom_theta_get()) + "\n" +
+            "Intake Temp: " + std::to_string(intake.intake_motors.get_temperature_all()[0]) + "C",
             1
           );
         }
@@ -226,6 +220,7 @@ void ez_template_extras() {
   }
 }
 
+// ===== OPERATOR CONTROL =====
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -241,15 +236,18 @@ void ez_template_extras() {
  */
 void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  sprockets.set_state_and_move(Sprockets::State::NONE);
+  intake.set_state_and_move(Intake::State::NONE);
 
   while (true) {
     ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
-    sprockets.opcontrol();
+    intake.opcontrol();
 
-    will.button_toggle(master.get_digital(DIGITAL_B));
+    // Three individual pistons
+    piston1.button_toggle(master.get_digital(DIGITAL_L1));
+    piston2.button_toggle(master.get_digital(DIGITAL_L2));
+    piston3.button_toggle(master.get_digital(DIGITAL_B));
     
     pros::delay(ez::util::DELAY_TIME);
   }

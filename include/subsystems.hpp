@@ -2,7 +2,12 @@
 
 #include "main.h"
 
+// ===== SUBSYSTEM DECLARATIONS =====
 extern Drive chassis;
-extern Sprockets sprockets;
+extern Intake intake;
 
-inline ez::Piston will('A', false);
+// ===== PNEUMATICS =====
+// Three individual pistons
+inline ez::Piston piston1('A', false);
+inline ez::Piston piston2('B', false);
+inline ez::Piston piston3('C', false);
