@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "statemachine",
+    "project_name": "kinetic_code",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -426,7 +426,7 @@
     "upload_options": {
       "description": "i am become gone",
       "icon": "planet",
-      "slot": 1
+      "slot": 3
     },
     "use_early_access": false
   }
