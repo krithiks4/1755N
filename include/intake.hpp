@@ -20,7 +20,6 @@ class Intake {
         pros::MotorGroup intake_motors;
     private:
         State state = State::NONE;
-
         const int INTAKE_VOLTAGE = 127;
 
         void move();

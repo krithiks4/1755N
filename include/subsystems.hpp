@@ -4,10 +4,9 @@
 
 // ===== SUBSYSTEM DECLARATIONS =====
 extern ez::Drive chassis;
-extern Intake intake;
+extern Scoring scoring;
 
 // ===== PNEUMATICS =====
-// Three individual pistons
-inline ez::Piston piston1('A', false);
-inline ez::Piston piston2('B', false);
-inline ez::Piston piston3('C', false);
+// Middle goal piston (A) and Tongue mech piston (B)
+inline ez::Piston piston1('A', false);  // Middle goal piston
+inline ez::Piston piston2('B', false);  // Tongue mech piston

@@ -43,7 +43,7 @@
 //#include "pros/api_legacy.h"
 #include "EZ-Template/api.hpp"
 
-#include "intake.hpp"
+#include "scoring.hpp"
 #include "autons.hpp"
 #include "subsystems.hpp"
 

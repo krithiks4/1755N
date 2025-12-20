@@ -70,11 +70,13 @@ void turn_test() {
 }
 
 void intake_test() {
-  intake.set_state_and_move(Intake::State::INTAKING);
-  pros::delay(3000);
-  intake.set_state_and_move(Intake::State::OUTTAKING);
-  pros::delay(3000);
-  intake.set_state_and_move(Intake::State::NONE);
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(2000);
+  scoring.set_state_and_move(Scoring::State::MIDDLE_GOAL);
+  pros::delay(2000);
+  scoring.set_state_and_move(Scoring::State::STORAGE);
+  pros::delay(2000);
+  scoring.set_state_and_move(Scoring::State::NONE);
 }
 
 void odom_test() {

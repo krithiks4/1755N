@@ -13,25 +13,22 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-1, -2, -3}, // Left Chassis Ports (negative port will reverse it!)
-    {4, 5, 6},  // Right Chassis Ports (negative port will reverse it!)
+    {-19, -18, -17}, // Left Chassis Ports (Left back 19, middle 18, front 17)
+    {16, 15, 14},    // Right Chassis Ports (Right back 16, middle 15, front 14)
 
-    7,      // IMU Port
+    10,     // IMU Port (Vex key 10)
     4.125,  // Wheel diameter
     450     // Cartridge RPM
 );
 
 // ===== SUBSYSTEMS =====
-// 2 motor intake group spinning same direction
-Intake intake({11, 12});
+// Scoring mechanism with top motor (12) and bottom motor (11)
+Scoring scoring(12, 11);
 
 // ===== ODOMETRY TRACKING WHEELS =====
-// - `13` and `14` are smart ports (making these negative will reverse the sensor)
-//  - you should get positive values on the encoders going FORWARD and RIGHT
-// - `2.75` is the wheel diameter
-// - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels (horizontal)
-ez::tracking_wheel vert_tracker(14, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels (vertical)
+// Disabled for this robot configuration - no tracking wheels on this build
+// ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);
+// ez::tracking_wheel vert_tracker(14, 2.75, 4.0);
 
 // ===== INITIALIZATION =====
 /**
@@ -46,15 +43,12 @@ void initialize() {
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
-  // Initialize intake motors
-  intake.init();
+  // Initialize scoring motors
+  scoring.init();
 
-  // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
-  //  - change `back` to `front` if the tracking wheel is in front of the midline
-  chassis.odom_tracker_back_set(&horiz_tracker);
-  // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
-  //  - change `left` to `right` if the tracking wheel is to the right of the centerline
-  chassis.odom_tracker_left_set(&vert_tracker);
+  // No tracking wheels on this robot
+  // chassis.odom_tracker_back_set(&horiz_tracker);
+  // chassis.odom_tracker_left_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
   chassis.opcontrol_drive_activebrake_set(0.0);
@@ -71,7 +65,7 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
-      {"INTAKE TEST\n\nRun intake for 3 seconds", intake_test},
+      {"SCORING TEST\n\nTest scoring mechanisms", intake_test},
       {"ODOM TEST\n\nTest odometry movement", odom_test},
       {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
   });
@@ -88,7 +82,7 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {
-  intake.set_state_and_move(Intake::State::NONE);
+  scoring.set_state_and_move(Scoring::State::NONE);
 }
 
 /**
@@ -170,7 +164,8 @@ void ez_screen_task() {
             "X: " + std::to_string(chassis.odom_x_get()) + "\n" +
             "Y: " + std::to_string(chassis.odom_y_get()) + "\n" +
             "Theta: " + std::to_string(chassis.odom_theta_get()) + "\n" +
-            "Intake Temp: " + std::to_string(intake.intake_motors.get_temperature_all()[0]) + "C",
+            "Top Motor Temp: " + std::to_string(scoring.top_motor.get_temperature()) + "C\n" +
+            "Bottom Motor Temp: " + std::to_string(scoring.bottom_motor.get_temperature()) + "C",
             1
           );
         }
@@ -239,18 +234,18 @@ void ez_template_extras() {
  */
 void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  intake.set_state_and_move(Intake::State::NONE);
+  scoring.set_state_and_move(Scoring::State::NONE);
 
   while (true) {
     ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
-    intake.opcontrol(master);
+    scoring.opcontrol(master);
 
-    // Three individual pistons (moved to different buttons to avoid conflict with intake)
-    // piston1.button_toggle(master.get_digital(DIGITAL_L1));  // L1 now used for intake
-    // piston2.button_toggle(master.get_digital(DIGITAL_L2));  // L2 now used for intake
-    piston3.button_toggle(master.get_digital(DIGITAL_B));
+    // Pneumatics controls:
+    // Middle goal piston (A) and Tongue mech piston (B)
+    piston1.button_toggle(master.get_digital(DIGITAL_A));  // Middle goal piston
+    piston2.button_toggle(master.get_digital(DIGITAL_B));  // Tongue mech piston
     
     pros::delay(ez::util::DELAY_TIME);
   }
