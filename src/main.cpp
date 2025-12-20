@@ -46,6 +46,9 @@ void initialize() {
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
+  // Initialize intake motors
+  intake.init();
+
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   chassis.odom_tracker_back_set(&horiz_tracker);
@@ -242,11 +245,11 @@ void opcontrol() {
     ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
-    intake.opcontrol();
+    intake.opcontrol(master);
 
-    // Three individual pistons
-    piston1.button_toggle(master.get_digital(DIGITAL_L1));
-    piston2.button_toggle(master.get_digital(DIGITAL_L2));
+    // Three individual pistons (moved to different buttons to avoid conflict with intake)
+    // piston1.button_toggle(master.get_digital(DIGITAL_L1));  // L1 now used for intake
+    // piston2.button_toggle(master.get_digital(DIGITAL_L2));  // L2 now used for intake
     piston3.button_toggle(master.get_digital(DIGITAL_B));
     
     pros::delay(ez::util::DELAY_TIME);

@@ -3,7 +3,7 @@
 #include "main.h"
 
 // ===== SUBSYSTEM DECLARATIONS =====
-extern Drive chassis;
+extern ez::Drive chassis;
 extern Intake intake;
 
 // ===== PNEUMATICS =====

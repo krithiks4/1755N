@@ -4,10 +4,10 @@
 void Intake::move() {
     switch (state) {
         case State::INTAKING:
-            intake_motors.move(INTAKE_VOLTAGE);
+            intake_motors.move_voltage(12000);  // 12V forward
             break;
         case State::OUTTAKING:
-            intake_motors.move(-INTAKE_VOLTAGE);
+            intake_motors.move_voltage(-12000);  // 12V reverse
             break;
         case State::NONE:
         default:
@@ -25,10 +25,10 @@ void Intake::set_state_and_move(State state) {
     move();
 }
 
-void Intake::opcontrol() {
-    if (master.get_digital(DIGITAL_R1)) {
+void Intake::opcontrol(pros::Controller& controller) {
+    if (controller.get_digital(DIGITAL_L1)) {
         set_state(State::INTAKING);
-    } else if (master.get_digital(DIGITAL_R2)) {
+    } else if (controller.get_digital(DIGITAL_L2)) {
         set_state(State::OUTTAKING);
     } else {
         set_state(State::NONE);

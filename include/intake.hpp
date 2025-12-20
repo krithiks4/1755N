@@ -31,8 +31,13 @@ class Intake {
             intake_motors.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
         }
 
+        void init() {
+            // Call this during initialize() after PROS is ready
+            intake_motors.set_gearing(pros::E_MOTOR_GEAR_200);
+        }
+
         void set_state(State state);
         void set_state_and_move(State state);
 
-        void opcontrol();
+        void opcontrol(pros::Controller& controller);
 };
