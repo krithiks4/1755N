@@ -1,13 +1,13 @@
 #include "main.h"
 #include "autons.hpp"
 
-// ===== AUTONOMOUS CONSTANTS =====
+// Autonomous Constants
 // These are out of 127
 const int DRIVE_SPEED = 127;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 90;
 
-// ===== PID CONSTANTS =====
+// PID Constants
 void default_constants() {
   // P, I, D, and Start I
   chassis.pid_drive_constants_set(10.0, 0.0, 50.0);        // Fwd/rev constants, used for odom and non odom motions
@@ -43,7 +43,7 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
 
-// ===== AUTONOMOUS ROUTINES =====
+// Autonomous Routines
 void pid_tuning_test() {
   // Drive 24 inches (2 feet) forward for PID tuning
   chassis.pid_drive_set(24_in, DRIVE_SPEED);

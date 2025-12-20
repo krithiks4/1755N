@@ -1,7 +1,5 @@
-/*
- * Nuclear Code - Scoring Mechanism
- * Top Motor (12) and Bottom Motor (11)
- */
+// Scoring Mechanism
+// Top Motor (12) and Bottom Motor (11)
 
 #pragma once
 

@@ -9,8 +9,7 @@
  * - Goon
  */
 
-// ===== CHASSIS CONFIGURATION =====
-// Chassis constructor
+// Chassis Configuration
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
     {-19, -18, -17}, // Left Chassis Ports (Left back 19, middle 18, front 17)
@@ -21,16 +20,15 @@ ez::Drive chassis(
     450     // Cartridge RPM
 );
 
-// ===== SUBSYSTEMS =====
+// Subsystems
 // Scoring mechanism with top motor (12) and bottom motor (11)
 Scoring scoring(12, 11);
 
-// ===== ODOMETRY TRACKING WHEELS =====
+// Odometry Tracking Wheels
 // Disabled for this robot configuration - no tracking wheels on this build
 // ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);
 // ez::tracking_wheel vert_tracker(14, 2.75, 4.0);
 
-// ===== INITIALIZATION =====
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -75,7 +73,6 @@ void initialize() {
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
 
-// ===== COMPETITION FUNCTIONS =====
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
@@ -218,7 +215,6 @@ void ez_template_extras() {
   }
 }
 
-// ===== OPERATOR CONTROL =====
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
