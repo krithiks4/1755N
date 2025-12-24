@@ -12,8 +12,8 @@
 // Chassis Configuration
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-19, -18, -17}, // Left Chassis Ports (Left back 19, middle 18, front 17)
-    {16, 15, 14},    // Right Chassis Ports (Right back 16, middle 15, front 14)
+    {19, -18, -17},  // Left Chassis Ports (Left back 19 reversed, middle 18, front 17)
+    {-16, 15, 14},   // Right Chassis Ports (Right back 16 reversed, middle 15, front 14)
 
     10,     // IMU Port (Vex key 10)
     4.125,  // Wheel diameter
@@ -239,7 +239,7 @@ void opcontrol() {
     scoring.opcontrol(master);
 
     // Pneumatics controls:
-    // Middle goal piston (A) and Tongue mech piston (B)
+    // Middle goal piston (G) and Tongue mech piston (H)
     piston1.button_toggle(master.get_digital(DIGITAL_A));  // Middle goal piston
     piston2.button_toggle(master.get_digital(DIGITAL_B));  // Tongue mech piston
     
