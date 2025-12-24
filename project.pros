@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "kinetic_code",
+    "project_name": "nuclear_code",
     "target": "v5",
     "templates": {
       "EZ-Template": {
