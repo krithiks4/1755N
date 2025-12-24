@@ -16,7 +16,7 @@ ez::Drive chassis(
     {-1, -2, -3}, // Left Chassis Ports (negative port will reverse it!)
     {4, 5, 6},  // Right Chassis Ports (negative port will reverse it!)
 
-    7,      // IMU Port
+    8,      // IMU Port
     4.125,  // Wheel diameter
     450     // Cartridge RPM
 );
@@ -26,12 +26,12 @@ ez::Drive chassis(
 Intake intake({11, 12});
 
 // ===== ODOMETRY TRACKING WHEELS =====
-// - `13` and `14` are smart ports (making these negative will reverse the sensor)
+// - `9` and `10` are smart ports (making these negative will reverse the sensor)
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels (horizontal)
-ez::tracking_wheel vert_tracker(14, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels (vertical)
+ez::tracking_wheel horiz_tracker(9, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels (horizontal)
+ez::tracking_wheel vert_tracker(10, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels (vertical)
 
 // ===== INITIALIZATION =====
 /**
