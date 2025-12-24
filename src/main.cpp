@@ -247,10 +247,12 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     intake.opcontrol(master);
 
-    // Three individual pistons (moved to different buttons to avoid conflict with intake)
-    // piston1.button_toggle(master.get_digital(DIGITAL_L1));  // L1 now used for intake
-    // piston2.button_toggle(master.get_digital(DIGITAL_L2));  // L2 now used for intake
-    piston3.button_toggle(master.get_digital(DIGITAL_B));
+    // Four individual pistons mapped to face buttons for testing
+    // Press each button to toggle the corresponding piston and identify which one it controls
+    piston1.button_toggle(master.get_digital(DIGITAL_X));  // Port E
+    piston2.button_toggle(master.get_digital(DIGITAL_B));  // Port F
+    piston3.button_toggle(master.get_digital(DIGITAL_Y));  // Port G
+    piston4.button_toggle(master.get_digital(DIGITAL_A));  // Port H
     
     pros::delay(ez::util::DELAY_TIME);
   }
