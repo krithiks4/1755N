@@ -13,8 +13,8 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-1, -2, -3}, // Left Chassis Ports (negative port will reverse it!)
-    {4, 5, 6},  // Right Chassis Ports (negative port will reverse it!)
+    {1, 2, 3}, // Left Chassis Ports (negative port will reverse it!)
+    {-4, -5, -6},  // Right Chassis Ports (negative port will reverse it!)
 
     8,      // IMU Port
     4.125,  // Wheel diameter
@@ -247,12 +247,18 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     intake.opcontrol(master);
 
-    // Four individual pistons mapped to face buttons for testing
-    // Press each button to toggle the corresponding piston and identify which one it controls
-    piston1.button_toggle(master.get_digital(DIGITAL_X));  // Port E
-    piston2.button_toggle(master.get_digital(DIGITAL_B));  // Port F
-    piston3.button_toggle(master.get_digital(DIGITAL_Y));  // Port G
-    piston4.button_toggle(master.get_digital(DIGITAL_A));  // Port H
+    // Pneumatic controls
+    intake_lift.button_toggle(master.get_digital(DIGITAL_UP));    // Port E - Up arrow
+    
+    // Indexer: L1 extends, L2 retracts
+    if (master.get_digital(DIGITAL_L1)) {
+      indexer.set(true);   // Extend
+    } else if (master.get_digital(DIGITAL_L2)) {
+      indexer.set(false);  // Retract
+    }
+    
+    wing.button_toggle(master.get_digital(DIGITAL_A));            // Port G - Button A
+    little_will_mech.button_toggle(master.get_digital(DIGITAL_Y)); // Port H - Button Y
     
     pros::delay(ez::util::DELAY_TIME);
   }

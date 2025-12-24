@@ -26,9 +26,9 @@ void Intake::set_state_and_move(State state) {
 }
 
 void Intake::opcontrol(pros::Controller& controller) {
-    if (controller.get_digital(DIGITAL_L1)) {
+    if (controller.get_digital(DIGITAL_R1)) {
         set_state(State::INTAKING);
-    } else if (controller.get_digital(DIGITAL_L2)) {
+    } else if (controller.get_digital(DIGITAL_R2)) {
         set_state(State::OUTTAKING);
     } else {
         set_state(State::NONE);
