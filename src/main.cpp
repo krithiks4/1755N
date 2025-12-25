@@ -1,20 +1,12 @@
 #include "main.h"
 
-/*
- * Authored by the single and only Ethan "Goon" Chen
- * Who is ethan chen?
- * Ethan chen is the legend who single-handedly built 1755N from the ground up
- * He is also a fantastic programmer and an even more fantastic person
- * If you see him, be sure to thank him for all his hard work!
- * - Goon
- */
 
 // ===== CHASSIS CONFIGURATION =====
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {1, 2, 3}, // Left Chassis Ports (negative port will reverse it!)
-    {-4, -5, -6},  // Right Chassis Ports (negative port will reverse it!)
+    {-4, -5, -6}, // Left Chassis Ports (negative port will reverse it!) - SWAPPED
+    {1, 2, 3},    // Right Chassis Ports (negative port will reverse it!) - SWAPPED
 
     8,      // IMU Port
     4.125,  // Wheel diameter
