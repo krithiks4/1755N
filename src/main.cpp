@@ -36,6 +36,7 @@ Scoring scoring(12, 11);
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+  pros::lcd::initialize(); // Initialize Brain Screen for testing
   // Print our branding over your terminal :D
   ez::ez_template_print();
 
@@ -192,9 +193,6 @@ pros::Task ezScreenTask(ez_screen_task);
 void ez_template_extras() {
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
-
-    if (master.get_digital(DIGITAL_RIGHT) && master.get_digital_new_press(DIGITAL_A))
-      autonomous();
     
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
@@ -235,6 +233,20 @@ void opcontrol() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   while (true) {
+    // Check for autonomous trigger FIRST (before ez_template_extras)
+    // Method 1: Brain Screen Center Button - Press to run selected auton
+    if (pros::lcd::read_buttons() == LCD_BTN_CENTER) {
+      autonomous();
+      // Wait for button release to prevent multiple triggers
+      while (pros::lcd::read_buttons() == LCD_BTN_CENTER) pros::delay(20);
+    }
+
+    // Method 2: Controller A Button - Quick test trigger
+    // ⚠️ Remove before competition!
+    if (master.get_digital_new_press(DIGITAL_A)) {
+      autonomous();
+    }
+
     ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
