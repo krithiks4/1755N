@@ -9,6 +9,8 @@ class Scoring {
     public:
         enum class State {
             NONE,
+            INTAKING,       // Both motors forward
+            OUTTAKING,      // Both motors reverse
             HIGH_GOAL,      // Both motors forward
             MIDDLE_GOAL,    // Top reverse, bottom forward
             STORAGE         // Only bottom forward

@@ -238,10 +238,13 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     scoring.opcontrol(master);
 
-    // Pneumatics controls:
-    // Middle goal piston (G) and Tongue mech piston (H)
-    piston1.button_toggle(master.get_digital(DIGITAL_A));  // Middle goal piston
-    piston2.button_toggle(master.get_digital(DIGITAL_B));  // Tongue mech piston
+    // Pneumatics controls
+    // Piston H (piston2) - Middle goal (R1) ON, High goal (R2) OFF
+    if (master.get_digital(DIGITAL_R1)) piston2.set(true);
+    if (master.get_digital(DIGITAL_R2)) piston2.set(false);
+
+    // Piston G (piston1) - Little will mech (Down arrow)
+    piston1.button_toggle(master.get_digital(DIGITAL_DOWN));
     
     pros::delay(ez::util::DELAY_TIME);
   }
