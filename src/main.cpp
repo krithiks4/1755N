@@ -190,14 +190,11 @@ pros::Task ezScreenTask(ez_screen_task);
  * - gives you a GUI to change your PID values live by pressing X
  */
 void ez_template_extras() {
-  if (master.get_digital(DIGITAL_RIGHT) && master.get_digital(DIGITAL_A)) {
-    autonomous();
-    // Wait for buttons to be released to prevent re-triggering
-    while (master.get_digital(DIGITAL_RIGHT) || master.get_digital(DIGITAL_A)) pros::delay(20);
-  }
-
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
+
+    if (master.get_digital(DIGITAL_RIGHT) && master.get_digital_new_press(DIGITAL_A))
+      autonomous();
     
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
