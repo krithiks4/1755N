@@ -11,7 +11,7 @@ class Scoring {
             NONE,
             INTAKING,       // Both motors forward
             OUTTAKING,      // Both motors reverse
-            HIGH_GOAL,      // Both motors forward
+            HIGH_GOAL,      // Top reverse, bottom forward
             MIDDLE_GOAL,    // Top reverse, bottom forward
             STORAGE         // Only bottom forward
         };
