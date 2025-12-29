@@ -193,7 +193,7 @@ void ez_template_extras() {
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
 
-    if (master.get_digital_new_press(DIGITAL_DOWN) && master.get_digital(DIGITAL_B))
+    if (master.get_digital_new_press(DIGITAL_RIGHT) && master.get_digital(DIGITAL_A))
       autonomous();
     
     // PID Tuner
