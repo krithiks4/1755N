@@ -426,7 +426,7 @@
     "upload_options": {
       "description": "i am become gone",
       "icon": "planet",
-      "slot": 3
+      "slot": 2
     },
     "use_early_access": false
   }
