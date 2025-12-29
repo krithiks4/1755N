@@ -13,7 +13,8 @@ class Scoring {
             OUTTAKING,      // Both motors reverse
             HIGH_GOAL,      // Both motors forward
             MIDDLE_GOAL,    // Top reverse, bottom forward
-            STORAGE         // Only bottom forward
+            STORAGE,        // Only bottom forward
+            LOW_GOAL        // Only bottom forward
         };
 
         pros::Motor top_motor;
@@ -39,5 +40,5 @@ class Scoring {
         void set_state(State state);
         void set_state_and_move(State state);
 
-        void opcontrol(pros::Controller& controller);
+        void opcontrol(pros::Controller& controller, bool piston_h_state);
 };

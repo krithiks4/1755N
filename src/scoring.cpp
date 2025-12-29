@@ -20,7 +20,8 @@ void Scoring::move() {
             bottom_motor.move_voltage(12000);  // 12V forward
             break;
         case State::STORAGE:
-            // Storage is only bottom motor going forward
+        case State::LOW_GOAL:
+            // Only bottom motor going forward
             top_motor.brake();
             bottom_motor.move_voltage(12000);  // 12V forward
             break;
@@ -41,17 +42,17 @@ void Scoring::set_state_and_move(State state) {
     move();
 }
 
-void Scoring::opcontrol(pros::Controller& controller) {
-    if (controller.get_digital(DIGITAL_L1)) {
+void Scoring::opcontrol(pros::Controller& controller, bool piston_h_state) {
+    if (controller.get_digital(DIGITAL_R1)) {
         set_state(State::INTAKING);
+    } else if (controller.get_digital(DIGITAL_L1)) {
+        if (piston_h_state) {
+            set_state(State::MIDDLE_GOAL);
+        } else {
+            set_state(State::HIGH_GOAL);
+        }
     } else if (controller.get_digital(DIGITAL_L2)) {
-        set_state(State::OUTTAKING);
-    } else if (controller.get_digital(DIGITAL_R1)) {
-        set_state(State::MIDDLE_GOAL);
-    } else if (controller.get_digital(DIGITAL_R2)) {
-        set_state(State::HIGH_GOAL);
-    } else if (controller.get_digital(DIGITAL_UP)) {
-        set_state(State::STORAGE);
+        set_state(State::LOW_GOAL);
     } else {
         set_state(State::NONE);
     }
