@@ -61,6 +61,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
       {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
       {"SCORING TEST\n\nTest scoring mechanisms", intake_test},

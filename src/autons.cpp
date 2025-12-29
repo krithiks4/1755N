@@ -69,6 +69,60 @@ void turn_test() {
   chassis.pid_wait();
 }
 
+void right_side_auton() {
+  // 1. move 30 inches forward
+  chassis.pid_drive_set(30_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 2. turn right 90 degrees
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // 3. activate little will mech
+  piston2.set(true);
+
+  // 4. move 2 inches forward
+  chassis.pid_drive_set(2_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 5. intake for 1.5 seconds
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  pros::delay(1500);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 6. move in reverse 26 inches
+  chassis.pid_drive_set(-26_in, DRIVE_SPEED);
+
+  // 7. deactivate little will mech while moving
+  piston2.set(false);
+
+  // 8. once you finish moving 26 inches run high goal for 2.5 seconds
+  chassis.pid_wait();
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(2500);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 9. move forward 16 inches
+  chassis.pid_drive_set(16_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 10. move 135 degrees to the right
+  chassis.pid_turn_relative_set(135_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // 11. move 51 inches forward
+  chassis.pid_drive_set(51_in, DRIVE_SPEED);
+
+  // 12. keep intaking until you reach 45 inches of the 51
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  chassis.pid_wait_until(45_in);
+
+  // 13. for the next 6 inches run reverse intake
+  scoring.set_state_and_move(Scoring::State::OUTTAKING);
+  chassis.pid_wait();
+  scoring.set_state_and_move(Scoring::State::NONE);
+}
+
 void intake_test() {
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2000);
