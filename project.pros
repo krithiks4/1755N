@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "nuclear_code",
+    "project_name": "cuvaneesh",
     "target": "v5",
     "templates": {
       "EZ-Template": {

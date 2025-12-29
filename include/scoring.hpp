@@ -40,5 +40,5 @@ class Scoring {
         void set_state(State state);
         void set_state_and_move(State state);
 
-        void opcontrol(pros::Controller& controller, bool piston_h_state);
+        void opcontrol(pros::Controller& controller);
 };

@@ -241,11 +241,11 @@ void opcontrol() {
     if (master.get_digital(DIGITAL_UP)) piston2.set(true);
     if (master.get_digital(DIGITAL_DOWN)) piston2.set(false);
 
-    // Piston G (piston1) - Little will mech (R2)
-    piston1.button_toggle(master.get_digital(DIGITAL_R2));
+    // Piston G (piston1) - Little will mech (Down arrow)
+    piston1.button_toggle(master.get_digital(DIGITAL_DOWN));
 
     // Scoring and Intake controls
-    scoring.opcontrol(master, piston2.get());
+    scoring.opcontrol(master);
     
     pros::delay(ez::util::DELAY_TIME);
   }
