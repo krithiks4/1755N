@@ -4,10 +4,14 @@
 void Scoring::move() {
     switch (state) {
         case State::INTAKING:
-        case State::HIGH_GOAL:
-        case State::MIDDLE_GOAL:
             // Both motors spinning forward
             top_motor.move_voltage(12000);     // 12V forward
+            bottom_motor.move_voltage(12000);  // 12V forward
+            break;
+        case State::HIGH_GOAL:
+        case State::MIDDLE_GOAL:
+            // Top reverse, bottom forward
+            top_motor.move_voltage(-12000);    // 12V reverse
             bottom_motor.move_voltage(12000);  // 12V forward
             break;
         case State::OUTTAKING:
