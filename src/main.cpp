@@ -61,6 +61,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"PID TEST - DRIVE 48 INCHES\n\nDrive forward 48 inches", pid_tuning_48_in},
       {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
       {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
@@ -192,7 +193,7 @@ void ez_template_extras() {
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
 
-    if (master.get_digital_new_press(DIGITAL_DOWN) && master.get_digital(DIGITAL_RIGHT))
+    if (master.get_digital_new_press(DIGITAL_DOWN) && master.get_digital(DIGITAL_B))
       autonomous();
     
     // PID Tuner

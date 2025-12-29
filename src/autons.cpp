@@ -44,6 +44,12 @@ void default_constants() {
 }
 
 // Autonomous Routines
+void pid_tuning_48_in() {
+  // Drive 48 inches (4 feet) forward for PID tuning
+  chassis.pid_drive_set(48_in, DRIVE_SPEED);
+  chassis.pid_wait();
+}
+
 void pid_tuning_test() {
   // Drive 24 inches (2 feet) forward for PID tuning
   chassis.pid_drive_set(24_in, DRIVE_SPEED);
