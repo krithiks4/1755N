@@ -240,12 +240,11 @@ void opcontrol() {
     scoring.opcontrol(master);
 
     // Pneumatics controls
-    // Piston H (piston1) - Middle goal (R1) ON, High goal (R2) OFF
-    if (master.get_digital(DIGITAL_R1)) piston1.set(true);
-    if (master.get_digital(DIGITAL_R2)) piston1.set(false);
+    // Piston H (piston1) - Middle goal (A)
+    piston1.button_toggle(master.get_digital_new_press(DIGITAL_A));
 
-    // Piston G (piston2) - Little will mech (Down arrow)
-    piston2.button_toggle(master.get_digital(DIGITAL_DOWN));
+    // Piston G (piston2) - Little will mech (Y)
+    piston2.button_toggle(master.get_digital_new_press(DIGITAL_Y));
     
     pros::delay(ez::util::DELAY_TIME);
   }
