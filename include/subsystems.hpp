@@ -7,6 +7,6 @@ extern ez::Drive chassis;
 extern Scoring scoring;
 
 // Pneumatics
-// Middle goal piston (G) and Tongue mech piston (H)
-inline ez::Piston piston1('G', false);  // Middle goal piston
-inline ez::Piston piston2('H', false);  // Tongue mech piston
+// Middle goal piston (H) and Tongue mech piston (G)
+inline ez::Piston piston1('H', false);  // Middle goal piston
+inline ez::Piston piston2('G', false);  // Tongue mech piston

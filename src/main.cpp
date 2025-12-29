@@ -237,14 +237,12 @@ void opcontrol() {
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     
-    // Piston H (piston2) - Up arrow ON, Down arrow OFF
-    if (master.get_digital(DIGITAL_UP)) piston2.set(true);
-    if (master.get_digital(DIGITAL_DOWN)) piston2.set(false);
+    // Piston H (piston1) - Up arrow ON, Down arrow OFF
+    if (master.get_digital(DIGITAL_UP)) piston1.set(true);
+    if (master.get_digital(DIGITAL_DOWN)) piston1.set(false);
 
-    // Piston G (piston1) - Little will mech (Down arrow)
-    piston1.button_toggle(master.get_digital(DIGITAL_DOWN));
-
-    // Scoring and Intake controls
+    // Piston G (piston2) - Little will mech (Down arrow)
+    piston2.button_toggle(master.get_digital(DIGITAL_DOWN));
     scoring.opcontrol(master);
     
     pros::delay(ez::util::DELAY_TIME);
