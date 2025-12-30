@@ -30,6 +30,44 @@ Scoring scoring(12, 11);
 // ez::tracking_wheel vert_tracker(14, 2.75, 4.0);
 
 /**
+ * Ez screen task
+ * Adding new pages here will let you view them during user control or autonomous
+ * and will help you debug problems you're having
+ */
+void ez_screen_task() {
+  while (true) {
+    // Only run this when not connected to a competition switch
+    if (!pros::competition::is_connected()) {
+      // Blank page for odom debugging
+      if (chassis.odom_enabled() && !chassis.pid_tuner_enabled()) {
+        // If we're on the first blank page...
+        if (ez::as::page_blank_is_on(0)) {
+          // Display debug information
+          ez::screen_print(
+            "comp: " + std::to_string(pros::competition::is_connected()) + "\n" +
+            "X: " + std::to_string(chassis.odom_x_get()) + "\n" +
+            "Y: " + std::to_string(chassis.odom_y_get()) + "\n" +
+            "Theta: " + std::to_string(chassis.odom_theta_get()) + "\n" +
+            "Top Motor Temp: " + std::to_string(scoring.top_motor.get_temperature()) + "C\n" +
+            "Bottom Motor Temp: " + std::to_string(scoring.bottom_motor.get_temperature()) + "C",
+            1
+          );
+        }
+      }
+    }
+
+    // Remove all blank pages when connected to a comp switch
+    else {
+      if (ez::as::page_blank_amount() > 0)
+        ez::as::page_blank_remove_all();
+    }
+
+    pros::delay(ez::util::DELAY_TIME);
+  }
+}
+pros::Task ezScreenTask(ez_screen_task);
+
+/**
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
@@ -62,8 +100,9 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"PID TEST - DRIVE 48 INCHES\n\nDrive forward 48 inches", pid_tuning_48_in},
+      {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
       {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
+      {"PID TEST - DRIVE 48 INCHES\n\nDrive forward 48 inches", pid_tuning_48_in},
       {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
       {"SCORING TEST\n\nTest scoring mechanisms", intake_test},
@@ -73,6 +112,7 @@ void initialize() {
 
   chassis.initialize();
   ez::as::initialize();
+
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
 
@@ -146,44 +186,6 @@ void screen_print_tracker(ez::tracking_wheel *tracker, std::string name, int lin
 }
 
 /**
- * Ez screen task
- * Adding new pages here will let you view them during user control or autonomous
- * and will help you debug problems you're having
- */
-void ez_screen_task() {
-  while (true) {
-    // Only run this when not connected to a competition switch
-    if (!pros::competition::is_connected()) {
-      // Blank page for odom debugging
-      if (chassis.odom_enabled() && !chassis.pid_tuner_enabled()) {
-        // If we're on the first blank page...
-        if (ez::as::page_blank_is_on(0)) {
-          // Display debug information
-          ez::screen_print(
-            "comp: " + std::to_string(pros::competition::is_connected()) + "\n" +
-            "X: " + std::to_string(chassis.odom_x_get()) + "\n" +
-            "Y: " + std::to_string(chassis.odom_y_get()) + "\n" +
-            "Theta: " + std::to_string(chassis.odom_theta_get()) + "\n" +
-            "Top Motor Temp: " + std::to_string(scoring.top_motor.get_temperature()) + "C\n" +
-            "Bottom Motor Temp: " + std::to_string(scoring.bottom_motor.get_temperature()) + "C",
-            1
-          );
-        }
-      }
-    }
-
-    // Remove all blank pages when connected to a comp switch
-    else {
-      if (ez::as::page_blank_amount() > 0)
-        ez::as::page_blank_remove_all();
-    }
-
-    pros::delay(ez::util::DELAY_TIME);
-  }
-}
-pros::Task ezScreenTask(ez_screen_task);
-
-/**
  * Gives you some extras to run in your opcontrol:
  * - run your autonomous routine in opcontrol by pressing DOWN and B
  *   - to prevent this from accidentally happening at a competition, this
@@ -233,18 +235,11 @@ void opcontrol() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   while (true) {
-    // Check for autonomous trigger FIRST (before ez_template_extras)
-    // Method 1: Brain Screen Center Button - Press to run selected auton
-    if (pros::lcd::read_buttons() == LCD_BTN_CENTER) {
-      autonomous();
-      // Wait for button release to prevent multiple triggers
-      while (pros::lcd::read_buttons() == LCD_BTN_CENTER) pros::delay(20);
-    }
-
-    // Method 2: Controller A Button - Quick test trigger
-    // ⚠️ Remove before competition!
-    if (master.get_digital_new_press(DIGITAL_A)) {
-      autonomous();
+    // Autonomous Trigger: DOWN + B
+    if (!pros::competition::is_connected()) {
+      if (master.get_digital(DIGITAL_DOWN) && master.get_digital_new_press(DIGITAL_B)) {
+        autonomous();
+      }
     }
 
     ez_template_extras();
@@ -253,12 +248,15 @@ void opcontrol() {
     scoring.opcontrol(master);
 
     // Pneumatics controls
-    // Piston H (piston1) - Middle goal (R1) ON, High goal (R2) OFF
+    // Piston H (piston1) - R1 = middle goal (ON), R2 = high goal (OFF)
     if (master.get_digital(DIGITAL_R1)) piston1.set(true);
     if (master.get_digital(DIGITAL_R2)) piston1.set(false);
 
-    // Piston G (piston2) - Little will mech (Down arrow)
-    piston2.button_toggle(master.get_digital(DIGITAL_DOWN));
+    // Piston G (piston2) - Little will mech (UP arrow)
+    // Toggle by setting to opposite of current state
+    if (master.get_digital_new_press(DIGITAL_UP)) {
+      piston2.set(!piston2.get());
+    }
     
     pros::delay(ez::util::DELAY_TIME);
   }

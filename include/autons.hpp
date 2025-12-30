@@ -15,3 +15,4 @@ void turn_test(); // Turn test
 void intake_test(); // Intake test
 void odom_test(); // Odometry test
 void right_side_auton(); // Right side autonomous routine
+void left_side_auton(); // Left side autonomous routine

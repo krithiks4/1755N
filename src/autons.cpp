@@ -10,37 +10,35 @@ const int SWING_SPEED = 90;
 // PID Constants
 void default_constants() {
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(5.0, 0.0, 70.0);        // Fwd/rev constants, used for odom and non odom motions
-  chassis.pid_heading_constants_set(11.0, 0.0, 20.0);      // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);      // Turn in place constants
-  chassis.pid_swing_constants_set(5.0, 0.0, 30.0);         // Swing constants
-  chassis.pid_odom_angular_constants_set(6.0, 0.0, 50.0);  // Angular control for odom motions
-  chassis.pid_odom_boomerang_constants_set(5.0, 0.0, 45.0); // Angular control for boomerang motions
+  chassis.pid_drive_constants_set(5.0, 0.0, 70.0);
+  chassis.pid_heading_constants_set(0.0, 0.0, 0.0);  
+  chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);
+  chassis.pid_swing_constants_set(5.0, 0.0, 30.0);
+  chassis.pid_odom_angular_constants_set(6.0, 0.0, 50.0);
+  chassis.pid_odom_boomerang_constants_set(5.0, 0.0, 45.0);
 
-  // Exit conditions
-  chassis.pid_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
-  chassis.pid_swing_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
-  chassis.pid_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 500_ms);
-  chassis.pid_odom_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 750_ms);
-  chassis.pid_odom_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 750_ms);
-  chassis.pid_turn_chain_constant_set(3_deg);
-  chassis.pid_swing_chain_constant_set(5_deg);
-  chassis.pid_drive_chain_constant_set(3_in);
+  // Exit conditions - REDUCED TIMEOUTS FOR SPEED
+  chassis.pid_turn_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 250_ms);
+  chassis.pid_swing_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 250_ms);
+  chassis.pid_drive_exit_condition_set(50_ms, 1_in, 150_ms, 2_in, 250_ms, 250_ms);
+  chassis.pid_odom_turn_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 500_ms);
+  chassis.pid_odom_drive_exit_condition_set(50_ms, 1_in, 150_ms, 2_in, 250_ms, 500_ms);
+  
+  // Chain constants - TIGHTER FOR SMOOTHER FLOW
+  chassis.pid_turn_chain_constant_set(5_deg);
+  chassis.pid_swing_chain_constant_set(7_deg);
+  chassis.pid_drive_chain_constant_set(5_in);
 
   // Slew constants
   chassis.slew_turn_constants_set(3_deg, 70);
   chassis.slew_drive_constants_set(3_in, 50);
   chassis.slew_swing_constants_set(3_in, 60);
 
-  // The amount that turns are prioritized over driving in odom motions
-  // - with tracking wheels, you can run this higher.  1.0 is the max
   chassis.odom_turn_bias_set(0.95);
-
-  chassis.odom_look_ahead_set(7_in);           // This is how far ahead in the path the robot looks at
-  chassis.odom_boomerang_distance_set(16_in);  // This sets the maximum distance away from target that the carrot point can be
-  chassis.odom_boomerang_dlead_set(0.625);     // This handles how aggressive the end of boomerang motions are
-
-  chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
+  chassis.odom_look_ahead_set(7_in);
+  chassis.odom_boomerang_distance_set(16_in);
+  chassis.odom_boomerang_dlead_set(0.625);
+  chassis.pid_angle_behavior_set(ez::shortest);
 }
 
 // Autonomous Routines
@@ -76,56 +74,117 @@ void turn_test() {
 }
 
 void right_side_auton() {
-  // 1. move 30 inches forward
-  chassis.pid_drive_set(30_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // 1. move 42.5 inches forward
+  chassis.pid_drive_set(42.5_in, DRIVE_SPEED);
+  chassis.pid_wait_quick(); 
 
   // 2. turn right 90 degrees
   chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
+  chassis.pid_wait_quick();  
 
   // 3. activate little will mech
   piston2.set(true);
 
-  // 4. move 2 inches forward
-  chassis.pid_drive_set(2_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // 4. move 9 inches forward
+  chassis.pid_drive_set(9_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
 
-  // 5. intake for 1.5 seconds
+  // 5. intake for 1 second
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(1500);
+  pros::delay(1000);
   scoring.set_state_and_move(Scoring::State::NONE);
 
-  // 6. move in reverse 26 inches
-  chassis.pid_drive_set(-26_in, DRIVE_SPEED);
+  // 6. move in reverse 41.5 inches
+  chassis.pid_drive_set(-41.5_in, DRIVE_SPEED);
 
   // 7. deactivate little will mech while moving
   piston2.set(false);
 
-  // 8. once you finish moving 26 inches run high goal for 2.5 seconds
-  chassis.pid_wait();
+  // 8. once you finish moving 33 inches run high goal for 2.5 seconds
+  chassis.pid_wait_quick();
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2500);
   scoring.set_state_and_move(Scoring::State::NONE);
 
-  // 9. move forward 16 inches
-  chassis.pid_drive_set(16_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // 9. move forward 19.5 inches
+  chassis.pid_drive_set(19.5_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
 
   // 10. move 135 degrees to the right
   chassis.pid_turn_relative_set(135_deg, TURN_SPEED);
-  chassis.pid_wait();
+  chassis.pid_wait_quick();
 
-  // 11. move 51 inches forward
-  chassis.pid_drive_set(51_in, DRIVE_SPEED);
+  // 11. move 60 inches forward
+  chassis.pid_drive_set(60_in, DRIVE_SPEED);
 
-  // 12. keep intaking until you reach 45 inches of the 51
+  // 12. keep intaking until you reach 54 inches of the 60
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_wait_until(45_in);
+  chassis.pid_wait_until(54_in);
 
   // 13. for the next 6 inches run reverse intake
   scoring.set_state_and_move(Scoring::State::OUTTAKING);
+  chassis.pid_wait();  // Keep regular wait for the final movement
+  scoring.set_state_and_move(Scoring::State::NONE);
+}
+
+void left_side_auton() {
+  // 1. move 42.5 inches forward
+  chassis.pid_drive_set(42.5_in, DRIVE_SPEED);
+  chassis.pid_wait_quick(); 
+
+  // 2. turn left 90 degrees
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait_quick();  
+
+  // 3. activate little will mech
+  piston2.set(true);
+
+  // 4. move 9 inches forward
+  chassis.pid_drive_set(9_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+
+  // 5. intake for 1 second
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  pros::delay(1000);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 6. move in reverse 42 inches
+  chassis.pid_drive_set(-42_in, DRIVE_SPEED);
+
+  // 7. deactivate little will mech while moving
+  piston2.set(false);
+
+  // 8. once you finish moving 33 inches run high goal for 2.5 seconds
+  chassis.pid_wait_quick();
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(2500);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 9. move forward 20 inches
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+
+  // 10. move 135 degrees to the left
+  chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);
+  chassis.pid_wait_quick();
+
+  // 11. move 56.5 inches forward while intaking
+  chassis.pid_drive_set(56.5_in, DRIVE_SPEED);
+  scoring.set_state_and_move(Scoring::State::INTAKING);
   chassis.pid_wait();
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 12. turn 180 degrees
+  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // 13. move 3.75 inches in reverse
+  chassis.pid_drive_set(-3.75_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 14. run high goal for 1.5 seconds
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(1500);
   scoring.set_state_and_move(Scoring::State::NONE);
 }
 

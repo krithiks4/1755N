@@ -50,8 +50,6 @@ void Scoring::opcontrol(pros::Controller& controller) {
         set_state(State::MIDDLE_GOAL);
     } else if (controller.get_digital(DIGITAL_R2)) {
         set_state(State::HIGH_GOAL);
-    } else if (controller.get_digital(DIGITAL_UP)) {
-        set_state(State::STORAGE);
     } else {
         set_state(State::NONE);
     }
