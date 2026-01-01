@@ -41,7 +41,6 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);
 }
 
-// Autonoous Routines
 #pragma region tests
 void pid_tuning_48_in() {
   // Drive 48 inches (4 feet) forward for PID tuning
@@ -134,13 +133,24 @@ void odom_test_points() {
 }
 #pragma endregion tests
 
+// Autonoous Routines
+
+/*
+ *
+ * towards the enemy side = 0 degrees
+ * driver's right = 90 deg
+ * driver's left = -90 deg / 270 deg
+ * 
+ */
+
+// does long goal on right side
 void long_goal_base() {
   // 1. move 42.5 inches forward
   chassis.pid_odom_set(42.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
-  // 2. turn right 90 degrees
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  // 2. turn to upwards
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait_quick();
 
   // 3. activate little will mech
@@ -168,7 +178,10 @@ void long_goal_base() {
   scoring.set_state_and_move(Scoring::State::NONE);
 }
 
+// long goal right side + middle low
 void right_side_auton() {
+  chassis.odom_xyt_set(0_in, 0_in, 90_deg);
+
   long_goal_base();
 
   // 9. move forward 19.5 inches
@@ -192,10 +205,11 @@ void right_side_auton() {
   scoring.set_state_and_move(Scoring::State::NONE);
 }
 
+// long goal left side + middle high
 void left_side_auton() {
-  chassis.odom_theta_flip(true);
-  long_goal_base(); 
-  chassis.odom_theta_flip(false);
+  chassis.odom_xyt_set(0_in, 0_in, -90_deg);
+
+  long_goal_base();
 
   // 9. move forward 20 inches
   chassis.pid_odom_set(20_in, DRIVE_SPEED);
@@ -225,17 +239,80 @@ void left_side_auton() {
   scoring.set_state_and_move(Scoring::State::NONE);
 }
 
+// comment because this function felt lonely without one
 void skills_auton() {
   skills_half();
   skills_half();
 
-  // park
+  chassis.odom_xyt_set(0_in, 0_in, 90_deg);
+
+  // park, from the side of the parking square
+  chassis.pid_odom_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
   
+  chassis.pid_turn_relative_set(30_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(25_in, DRIVE_SPEED); // no odom, start thrusting
+  chassis.pid_wait_quick_chain();
 }
 
+// go from start, do both sides of Right long goal
 void skills_half()
 {
-  chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  chassis.odom_xyt_set(0_in, 0_in, 90_deg);
   long_goal_base();
 
+  // go around the long goal and to the other side
+  chassis.pid_odom_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  chassis.pid_odom_set({-10_in, 15_in, 0_deg});
+  chassis.pid_wait_quick();
+
+  // pass to the other side
+  chassis.pid_odom_set(2_tile, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+
+  // from the left side of the long goal to the match loader
+  chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  chassis.pid_odom_set({10_in, 2_tile - 9_in, 0_deg});
+  chassis.pid_wait_quick();
+
+  // 3. activate little will mech
+  tongue_piston.set(true);
+
+  // 4. move 9 inches forward
+  chassis.pid_odom_set(9_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+
+  // 5. intake for 1 second
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  pros::delay(1000);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 6. move in reverse 41.5 inches
+  chassis.pid_odom_set(-41.5_in, DRIVE_SPEED);
+
+  // 7. deactivate little will mech while moving
+  tongue_piston.set(false);
+
+  // 8. once you finish moving 33 inches run high goal for 2.5 seconds
+  chassis.pid_wait_quick();
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(2500);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // return to position on the other side
+  chassis.pid_odom_set(9_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+
+  // 2. turn towards left, towards the other side's parking
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait_quick();
+
+  // 1. move 42.5 inches forward
+  chassis.pid_odom_set(42.5_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
 }
