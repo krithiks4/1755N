@@ -14,5 +14,7 @@ void drive_test(); // Drive forward and backward test
 void turn_test(); // Turn test
 void intake_test(); // Intake test
 void odom_test(); // Odometry test
+void odom_test_points(); // Odometry test2
+
 void right_side_auton(); // Right side autonomous routine
 void left_side_auton(); // Left side autonomous routine

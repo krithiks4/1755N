@@ -64,6 +64,10 @@ void ez_screen_task() {
             1
           );
         }
+
+        if (ez::as::page_blank_is_on(1)) {
+          ez::screen_print("jfkaefjenkfjna ef", 1);
+        }
       }
     }
 
@@ -114,6 +118,7 @@ void initialize() {
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
       {"SCORING TEST\n\nTest scoring mechanisms", intake_test},
       {"ODOM TEST\n\nTest odometry movement", odom_test},
+      {"ODOM with points TEST\n\nTest odometry movement2", odom_test_points},
       {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
   });
 
@@ -252,8 +257,8 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     scoring.opcontrol(master);
 
-    piston1.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
-    piston2.button_toggle(master.get_digital(DIGITAL_UP));
+    middleGoalPiston.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
+    tonguePiston.button_toggle(master.get_digital(DIGITAL_UP));
     
     pros::delay(ez::util::DELAY_TIME);
   }

@@ -8,5 +8,5 @@ extern Scoring scoring;
 
 // Pneumatics
 // Middle goal piston (H) and Tongue mech piston (G)
-inline ez::Piston piston1('H', false);  // Middle goal piston
-inline ez::Piston piston2('G', true);  // Tongue mech piston
+inline ez::Piston middleGoalPiston('H', false);  // Middle goal piston
+inline ez::Piston tonguePiston('G', true);  // Tongue mech piston
