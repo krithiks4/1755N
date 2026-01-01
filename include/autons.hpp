@@ -7,14 +7,18 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #pragma once
 
 void default_constants();
+
+void right_side_auton(); // Right side autonomous routine
+void left_side_auton(); // Left side autonomous routine
+
+void skills_auton();
+
+#pragma region tests
 void pid_tuning_48_in();
 void pid_tuning_test();
-
 void drive_test(); // Drive forward and backward test
 void turn_test(); // Turn test
 void intake_test(); // Intake test
 void odom_test(); // Odometry test
 void odom_test_points(); // Odometry test2
-
-void right_side_auton(); // Right side autonomous routine
-void left_side_auton(); // Left side autonomous routine
+#pragma endregion tests

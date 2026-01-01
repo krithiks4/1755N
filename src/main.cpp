@@ -113,6 +113,7 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
       {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
+      {"skills\n\n!!!!", skills_auton},
       {"PID TEST - DRIVE 48 INCHES\n\nDrive forward 48 inches", pid_tuning_48_in},
       {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
@@ -257,8 +258,8 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     scoring.opcontrol(master);
 
-    middleGoalPiston.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
-    tonguePiston.button_toggle(master.get_digital(DIGITAL_UP));
+    middle_goal_piston.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
+    tongue_piston.button_toggle(master.get_digital(DIGITAL_UP));
     
     pros::delay(ez::util::DELAY_TIME);
   }
