@@ -28,10 +28,6 @@ class Scoring {
         {
             top_motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
             bottom_motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-        }
-
-        void init() {
-            // Call this during initialize() after PROS is ready
             top_motor.set_gearing(pros::E_MOTOR_GEAR_200);
             bottom_motor.set_gearing(pros::E_MOTOR_GEAR_200);
         }

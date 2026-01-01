@@ -25,8 +25,19 @@ ez::Drive chassis(
 Scoring scoring(12, 11);
 
 // Odometry Tracking Wheels
-// Disabled for this robot configuration - no tracking wheels on this build
-// ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+// TODO THESE PARAMETERS NOT CORRECT
+ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);
 // ez::tracking_wheel vert_tracker(14, 2.75, 4.0);
 
 /**
@@ -80,11 +91,7 @@ void initialize() {
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
-  // Initialize scoring motors
-  scoring.init();
-
-  // No tracking wheels on this robot
-  // chassis.odom_tracker_back_set(&horiz_tracker);
+  chassis.odom_tracker_back_set(&horiz_tracker);
   // chassis.odom_tracker_left_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
@@ -195,6 +202,11 @@ void screen_print_tracker(ez::tracking_wheel *tracker, std::string name, int lin
 void ez_template_extras() {
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
+
+    // Autonomous Trigger: DOWN + B
+    if (master.get_digital(DIGITAL_DOWN) && master.get_digital_new_press(DIGITAL_B)) {
+      autonomous();
+    }
     
     // PID Tuner
     // - after you find values that you're happy with, you'll have to set them in auton.cpp
@@ -235,28 +247,13 @@ void opcontrol() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   while (true) {
-    // Autonomous Trigger: DOWN + B
-    if (!pros::competition::is_connected()) {
-      if (master.get_digital(DIGITAL_DOWN) && master.get_digital_new_press(DIGITAL_B)) {
-        autonomous();
-      }
-    }
-
     ez_template_extras();
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     scoring.opcontrol(master);
 
-    // Pneumatics controls
-    // Piston H (piston1) - R1 = middle goal (ON), R2 = high goal (OFF)
-    if (master.get_digital(DIGITAL_R1)) piston1.set(true);
-    if (master.get_digital(DIGITAL_R2)) piston1.set(false);
-
-    // Piston G (piston2) - Little will mech (UP arrow)
-    // Toggle by setting to opposite of current state
-    if (master.get_digital_new_press(DIGITAL_UP)) {
-      piston2.set(!piston2.get());
-    }
+    piston1.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
+    piston2.button_toggle(master.get_digital(DIGITAL_UP));
     
     pros::delay(ez::util::DELAY_TIME);
   }
