@@ -26,7 +26,7 @@ Scoring scoring(12, 11);
 
 // Odometry Tracking Wheels
 ez::tracking_wheel horiz_tracker(21, 1.5, 2);
-ez::tracking_wheel vert_tracker(20, 2, 0);
+//ez::tracking_wheel vert_tracker(20, 2, 0);
 
 /**
  * Ez screen task
@@ -84,7 +84,7 @@ void initialize() {
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   chassis.odom_tracker_back_set(&horiz_tracker);
-  chassis.odom_tracker_left_set(&vert_tracker);
+  //chassis.odom_tracker_left_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
   chassis.opcontrol_drive_activebrake_set(0.0);
@@ -102,13 +102,14 @@ void initialize() {
       {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
       {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
       {"skills\n\n!!!!", skills_auton},
-      {"PID TEST - DRIVE 48 INCHES\n\nDrive forward 48 inches", pid_tuning_48_in},
-      {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
-      {"TURN TEST\n\nTurn 90 degrees", turn_test},
-      {"SCORING TEST\n\nTest scoring mechanisms", intake_test},
-      {"ODOM TEST\n\nTest odometry movement", odom_test},
-      {"ODOM with points TEST\n\nTest odometry movement2", odom_test_points},
-      {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
+      {"skills HALF FIELD", skills_half}
+      // {"PID TEST - DRIVE 48 INCHES\n\nDrive forward 48 inches", pid_tuning_48_in},
+      // {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
+      // {"TURN TEST\n\nTurn 90 degrees", turn_test},
+      // {"SCORING TEST\n\nTest scoring mechanisms", intake_test},
+      // {"ODOM TEST\n\nTest odometry movement", odom_test},
+      // {"ODOM with points TEST\n\nTest odometry movement2", odom_test_points},
+      // {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
   });
 
   chassis.initialize();

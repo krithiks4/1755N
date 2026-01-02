@@ -18,27 +18,29 @@ void default_constants() {
   chassis.pid_odom_boomerang_constants_set(5.0, 0.0, 45.0);
 
   // Exit conditions - REDUCED TIMEOUTS FOR SPEED
-  chassis.pid_turn_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 250_ms);
-  chassis.pid_swing_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 250_ms);
-  chassis.pid_drive_exit_condition_set(50_ms, 1_in, 150_ms, 2_in, 250_ms, 250_ms);
-  chassis.pid_odom_turn_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 500_ms);
-  chassis.pid_odom_drive_exit_condition_set(50_ms, 1_in, 150_ms, 2_in, 250_ms, 500_ms);
-  
-  // Chain constants - TIGHTER FOR SMOOTHER FLOW
-  chassis.pid_turn_chain_constant_set(5_deg);
-  chassis.pid_swing_chain_constant_set(7_deg);
-  chassis.pid_drive_chain_constant_set(5_in);
+  chassis.pid_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
+  chassis.pid_swing_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
+  chassis.pid_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 500_ms);
+  chassis.pid_odom_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 750_ms);
+  chassis.pid_odom_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 750_ms);
+  chassis.pid_turn_chain_constant_set(3_deg);
+  chassis.pid_swing_chain_constant_set(5_deg);
+  chassis.pid_drive_chain_constant_set(3_in);
 
   // Slew constants
   chassis.slew_turn_constants_set(3_deg, 70);
-  chassis.slew_drive_constants_set(3_in, 50);
-  chassis.slew_swing_constants_set(3_in, 60);
+  chassis.slew_drive_constants_set(3_in, 70);
+  chassis.slew_swing_constants_set(3_in, 80);
 
-  chassis.odom_turn_bias_set(0.95);
-  chassis.odom_look_ahead_set(7_in);
-  chassis.odom_boomerang_distance_set(16_in);
-  chassis.odom_boomerang_dlead_set(0.625);
-  chassis.pid_angle_behavior_set(ez::shortest);
+  // The amount that turns are prioritized over driving in odom motions
+  // - if you have tracking wheels, you can run this higher.  1.0 is the max
+  chassis.odom_turn_bias_set(0.9);
+
+  chassis.odom_look_ahead_set(7_in);           // This is how far ahead in the path the robot looks at
+  chassis.odom_boomerang_distance_set(16_in);  // This sets the maximum distance away from target that the carrot point can be
+  chassis.odom_boomerang_dlead_set(0.625);     // This handles how aggressive the end of boomerang motions are
+
+  chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
 
 #pragma region tests
@@ -88,7 +90,7 @@ void odom_test() {
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
   
   // Simple odometry test - drive forward and display position
-  chassis.pid_odom_set(24_in, DRIVE_SPEED);
+  chassis.pid_drive_set(22_in, DRIVE_SPEED);
   chassis.pid_wait();
   
   pros::delay(1000);
@@ -97,7 +99,7 @@ void odom_test() {
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_odom_set(24_in, DRIVE_SPEED);
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
   
   pros::delay(1000);
@@ -106,13 +108,13 @@ void odom_test() {
   chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_odom_set(24_in, DRIVE_SPEED);
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
   
   chassis.pid_turn_set(270_deg, TURN_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_odom_set(24_in, DRIVE_SPEED);
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
   
   chassis.pid_turn_set(0_deg, TURN_SPEED);
@@ -147,18 +149,18 @@ void odom_test_points() {
 // does long goal on right side
 void long_goal_base() {
   // 1. move 42.5 inches forward
-  chassis.pid_odom_set(42.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(42.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 2. turn towards driver
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait_quick();
 
   // 3. activate little will mech
   tongue_piston.set(true);
 
   // 4. move 9 inches forward
-  chassis.pid_odom_set(9_in, DRIVE_SPEED);
+  chassis.pid_drive_set(9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake for 1 second
@@ -167,7 +169,7 @@ void long_goal_base() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // 6. move in reverse 41.5 inches
-  chassis.pid_odom_set(-41.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-41.5_in, DRIVE_SPEED);
 
   // 7. deactivate little will mech while moving
   tongue_piston.set(false);
@@ -186,7 +188,7 @@ void right_side_auton() {
   long_goal_base();
 
   // 9. move forward 19.5 inches
-  chassis.pid_odom_set(19.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(19.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 10. move 135 degrees to the right
@@ -194,7 +196,7 @@ void right_side_auton() {
   chassis.pid_wait_quick();
 
   // 11. move 60 inches forward
-  chassis.pid_odom_set(60_in, DRIVE_SPEED);
+  chassis.pid_drive_set(60_in, DRIVE_SPEED);
 
   // 12. keep intaking until you reach 54 inches of the 60
   scoring.set_state_and_move(Scoring::State::INTAKING);
@@ -213,7 +215,7 @@ void left_side_auton() {
   long_goal_base();
 
   // 9. move forward 20 inches
-  chassis.pid_odom_set(20_in, DRIVE_SPEED);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 10. move 135 degrees to the left
@@ -221,7 +223,7 @@ void left_side_auton() {
   chassis.pid_wait_quick();
 
   // 11. move 56.5 inches forward while intaking
-  chassis.pid_odom_set(56.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(56.5_in, DRIVE_SPEED);
   scoring.set_state_and_move(Scoring::State::INTAKING);
   chassis.pid_wait();
   scoring.set_state_and_move(Scoring::State::NONE);
@@ -231,7 +233,7 @@ void left_side_auton() {
   chassis.pid_wait();
 
   // 13. move 3.75 inches in reverse
-  chassis.pid_odom_set(-3.75_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-3.75_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   // 14. run high goal for 1.5 seconds
@@ -248,7 +250,7 @@ void skills_auton() {
   chassis.odom_xyt_set(0_in, 0_in, 90_deg);
 
   // park, from the side of the parking square
-  chassis.pid_odom_set(-15_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED);
   chassis.pid_wait();
   
   chassis.pid_turn_relative_set(30_deg, TURN_SPEED);
@@ -265,7 +267,7 @@ void skills_half()
   long_goal_base();
 
   // go around the long goal and to the other side
-  chassis.pid_odom_set(19.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(19.5_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   chassis.pid_turn_set(0_deg, TURN_SPEED);
@@ -276,7 +278,7 @@ void skills_half()
   chassis.pid_wait_quick();
 
   // pass to the other side
-  chassis.pid_odom_set(2_tile, DRIVE_SPEED);
+  chassis.pid_drive_set(2_tile, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // from the left side of the long goal to the match loader
@@ -288,7 +290,7 @@ void skills_half()
   tongue_piston.set(true);
 
   // 4. move 9 inches forward
-  chassis.pid_odom_set(9_in, DRIVE_SPEED);
+  chassis.pid_drive_set(9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake for 1 second
@@ -297,7 +299,7 @@ void skills_half()
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // 6. move in reverse 41.5 inches
-  chassis.pid_odom_set(-41.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-41.5_in, DRIVE_SPEED);
 
   // 7. deactivate little will mech while moving
   tongue_piston.set(false);
@@ -309,7 +311,7 @@ void skills_half()
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // return to position on the other side
-  chassis.pid_odom_set(9_in, DRIVE_SPEED);
+  chassis.pid_drive_set(9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 2. turn towards left, towards the other side's parking
@@ -317,6 +319,6 @@ void skills_half()
   chassis.pid_wait_quick();
 
   // 1. move 42.5 inches forward
-  chassis.pid_odom_set(42.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(42.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 }
