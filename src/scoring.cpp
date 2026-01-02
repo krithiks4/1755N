@@ -8,8 +8,8 @@ void Scoring::move() {
             top_motor.move_voltage(12000);     // 12V forward
             bottom_motor.move_voltage(12000);  // 12V forward
             break;
-        case State::HIGH_GOAL:
         case State::MIDDLE_GOAL:
+        case State::HIGH_GOAL:
             // Top reverse, bottom forward
             top_motor.move_voltage(-12000);    // 12V reverse
             bottom_motor.move_voltage(12000);  // 12V forward
