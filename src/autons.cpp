@@ -272,7 +272,7 @@ void skills_half()
   chassis.pid_wait();
 
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
-  chassis.pid_odom_set({-10_in, 19.5_in, 0_deg});
+  chassis.pid_odom_set({-10_in, 19.5_in, 0_deg}); // to pass on the right side instead, do 10_in (flip sign). maybe this is better because i just realized there are some center balls on the ground in the way on the left side of the right long goal
   chassis.pid_wait_quick();
 
   // pass to the other side
@@ -281,7 +281,7 @@ void skills_half()
 
   // from the left side of the long goal to the match loader
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
-  chassis.pid_odom_set({10_in, 2_tile - 9_in, 0_deg});
+  chassis.pid_odom_set({10_in, 2_tile - 9_in, 0_deg}); // to pass on the right side instead, do -10_in (flip sign)
   chassis.pid_wait_quick();
 
   // 3. activate little will mech
