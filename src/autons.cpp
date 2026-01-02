@@ -137,9 +137,10 @@ void odom_test_points() {
 
 /*
  *
- * towards the enemy side = 0 degrees
- * driver's right = 90 deg
- * driver's left = -90 deg / 270 deg
+ * towards the enemy = 0 degrees, positive Y
+ * towards the driver = 180 deg, negative Y
+ * driver's right = 90 deg, positive X
+ * driver's left = -90 deg / 270 deg, negative X
  * 
  */
 
