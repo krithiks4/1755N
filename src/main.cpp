@@ -25,20 +25,8 @@ ez::Drive chassis(
 Scoring scoring(12, 11);
 
 // Odometry Tracking Wheels
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-// TODO THESE PARAMETERS NOT CORRECT
-ez::tracking_wheel horiz_tracker(13, 2.75, 4.0);
-// ez::tracking_wheel vert_tracker(14, 2.75, 4.0);
+ez::tracking_wheel horiz_tracker(21, 1.5, 2);
+ez::tracking_wheel vert_tracker(20, 2, 0);
 
 /**
  * Ez screen task
@@ -96,7 +84,7 @@ void initialize() {
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   chassis.odom_tracker_back_set(&horiz_tracker);
-  // chassis.odom_tracker_left_set(&vert_tracker);
+  chassis.odom_tracker_left_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
   chassis.opcontrol_drive_activebrake_set(0.0);
