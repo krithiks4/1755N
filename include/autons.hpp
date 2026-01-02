@@ -9,6 +9,8 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 void default_constants();
 void pid_tuning_test();
 
+void rightAuton();
+void leftAuton();
 void drive_test(); // Drive forward and backward test
 void turn_test(); // Turn test
 void intake_test(); // Intake test

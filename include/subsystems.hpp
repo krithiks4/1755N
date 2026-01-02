@@ -11,4 +11,4 @@ extern Intake intake;
 inline ez::Piston intake_lift('E', false); 
 inline ez::Piston indexer('F', false);     
 inline ez::Piston wing('G', false);        
-inline ez::Piston little_will_mech('H', true);  
+inline ez::Piston lil_krith('H', true);  

@@ -61,6 +61,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Right Auton", rightAuton},
+      {"Left Auton", leftAuton},
       {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
       {"INTAKE TEST\n\nRun intake for 3 seconds", intake_test},
@@ -250,7 +252,7 @@ void opcontrol() {
     }
     
     wing.button_toggle(master.get_digital(DIGITAL_A));            // Port G - Button A
-    little_will_mech.button_toggle(master.get_digital(DIGITAL_Y)); // Port H - Button Y
+    lil_krith.button_toggle(master.get_digital(DIGITAL_Y)); // Port H - Button Y
     
     pros::delay(ez::util::DELAY_TIME);
   }
