@@ -149,8 +149,8 @@ void long_goal_base() {
   chassis.pid_odom_set(42.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
-  // 2. turn to upwards
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  // 2. turn towards driver
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait_quick();
 
   // 3. activate little will mech
@@ -264,11 +264,14 @@ void skills_half()
   long_goal_base();
 
   // go around the long goal and to the other side
-  chassis.pid_odom_set(-15_in, DRIVE_SPEED);
+  chassis.pid_odom_set(19.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
-  chassis.pid_odom_set({-10_in, 15_in, 0_deg});
+  chassis.pid_odom_set({-10_in, 19.5_in, 0_deg});
   chassis.pid_wait_quick();
 
   // pass to the other side
