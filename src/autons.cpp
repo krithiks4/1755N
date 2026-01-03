@@ -53,7 +53,8 @@ void default_constants() {
  */
 
 // does long goal on right side
-void long_goal_base() {
+// offset can be used if starting position is farther away from the parking zone, in the first motion of going to the matchloader
+void long_goal_base(okapi::QLength extraOffset = 0_in) {
   // 1. move 42.5 inches forward
   chassis.pid_drive_set(42.4_in, DRIVE_SPEED * 0.9);
   chassis.pid_wait_quick();
@@ -67,8 +68,8 @@ void long_goal_base() {
 
   pros::delay(500);
 
-  // 4. move 9 inches forward
-  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
+  // 4. move 15 inches forward, and extra offset
+  chassis.pid_drive_set(14.9_in + extraOffset, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake for 1 second
@@ -97,7 +98,7 @@ void right_side_auton() {
   long_goal_base();
 
   // 9. move forward 19.5 inches
-  chassis.pid_drive_set(30_in, DRIVE_SPEED);
+  chassis.pid_drive_set(28_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 10. move 135 degrees to the right
@@ -105,7 +106,7 @@ void right_side_auton() {
   chassis.pid_wait_quick();
 
   // 11. move 60 inches forward
-  chassis.pid_drive_set(70_in, DRIVE_SPEED);
+  chassis.pid_drive_set(69_in, DRIVE_SPEED);
 
   // 12. keep intaking until you reach 54 inches of the 60
   scoring.set_state_and_move(Scoring::State::INTAKING);
@@ -171,7 +172,7 @@ void skills_auton() {
   // right side
   chassis.odom_xyt_set(0_in, 0_in, 90_deg);
 
-  long_goal_base();
+  long_goal_base(7_in); // use extra offset
 
   // then do middle goals or something
 
