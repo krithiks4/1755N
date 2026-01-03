@@ -99,17 +99,9 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
       {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
-      {"skills\n\n!!!!", skills_auton},
-      {"skills HALF FIELD", skills_half}
-      // {"PID TEST - DRIVE 48 INCHES\n\nDrive forward 48 inches", pid_tuning_48_in},
-      // {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
-      // {"TURN TEST\n\nTurn 90 degrees", turn_test},
-      // {"SCORING TEST\n\nTest scoring mechanisms", intake_test},
-      // {"ODOM TEST\n\nTest odometry movement", odom_test},
-      // {"ODOM with points TEST\n\nTest odometry movement2", odom_test_points},
-      // {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
+      {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
+      {"skills\n\n!!!!", skills_auton}
   });
 
   chassis.initialize();
