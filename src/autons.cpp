@@ -166,13 +166,13 @@ void skills_auton() {
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(3.1_tile, DRIVE_SPEED);
+  chassis.pid_drive_set(3.1_tile + 10.1_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   // right side
   chassis.odom_xyt_set(0_in, 0_in, 90_deg);
 
-  long_goal_base(7_in); // use extra offset
+  long_goal_base(15_in); // use extra offset
 
   // then do middle goals or something
 
