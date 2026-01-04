@@ -149,9 +149,6 @@ void right_side_auton() {
   chassis.pid_wait_until(63_in);
   scoring.set_state_and_move(Scoring::State::NONE);
   
-  // 14. move forward 2 inches to push balls in
-  chassis.pid_drive_set(66_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
 }
 
 // long goal left side + middle high
