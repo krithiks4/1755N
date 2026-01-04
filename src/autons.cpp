@@ -113,7 +113,7 @@ void right_side_auton() {
 
   // 5. intake for 0.5 second
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(100);
+  pros::delay(400);
 
   // 6. move in reverse 41.5 inches
   chassis.pid_turn_set(180_deg, TURN_SPEED);
@@ -126,11 +126,11 @@ void right_side_auton() {
   // 8. once you finish moving 33 inches run high goal for 2.5 seconds
   chassis.pid_wait_quick();
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1850);
+  pros::delay(1950);
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // 9. move forward 19.5 inches
-  chassis.pid_drive_set(25.75_in, DRIVE_SPEED);
+  chassis.pid_drive_set(26.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 10. move 135 degrees to the right
@@ -138,7 +138,7 @@ void right_side_auton() {
   chassis.pid_wait_quick();
 
   // 11. move 60 inches forward
-  chassis.pid_drive_set(64_in, DRIVE_SPEED*0.75);
+  chassis.pid_drive_set(64_in, DRIVE_SPEED*0.7);
 
   // 12. keep intaking until you reach 59 inches of the 63
   scoring.set_state_and_move(Scoring::State::INTAKING);
@@ -150,7 +150,7 @@ void right_side_auton() {
   scoring.set_state_and_move(Scoring::State::NONE);
   
   // 14. move forward 2 inches to push balls in
-  chassis.pid_drive_set(2_in, DRIVE_SPEED);
+  chassis.pid_drive_set(66_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 }
 
@@ -168,15 +168,15 @@ void left_side_auton() {
   // 3. activate little will mech
   tongue_piston.set(true);
 
-  pros::delay(500);
+  pros::delay(400);
 
-  // 4. move 15 inches forward, and extra offset
+  // 4. move 15 inches forward
   chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake for 1 second
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(800);
+  pros::delay(400);
 
   // 6. move in reverse 41.5 inches
   chassis.pid_turn_set(180_deg, TURN_SPEED);
@@ -193,7 +193,7 @@ void left_side_auton() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // 9. move forward 20 inches
-  chassis.pid_drive_set(30_in, DRIVE_SPEED);
+  chassis.pid_drive_set(31_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 10. move 135 degrees to the left
@@ -216,7 +216,7 @@ void left_side_auton() {
 
   // 14. run high goal for 1.5 seconds
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1500);
+  pros::delay(1800);
   scoring.set_state_and_move(Scoring::State::NONE);
 }
 
