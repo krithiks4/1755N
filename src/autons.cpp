@@ -18,11 +18,11 @@ void default_constants() {
   chassis.pid_odom_boomerang_constants_set(5.0, 0.0, 45.0); // Angular control for boomerang motions
 
   // Exit conditions
-  chassis.pid_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
-  chassis.pid_swing_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
-  chassis.pid_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 500_ms);
-  chassis.pid_odom_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 750_ms);
-  chassis.pid_odom_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 750_ms);
+  chassis.pid_turn_exit_condition_set(70_ms, 3_deg, 200_ms, 6_deg, 250_ms, 250_ms);
+  chassis.pid_swing_exit_condition_set(70_ms, 3_deg, 200_ms, 6_deg, 250_ms, 250_ms);
+  chassis.pid_drive_exit_condition_set(70_ms, 1_in, 200_ms, 3_in, 250_ms, 300_ms);
+  chassis.pid_odom_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 300_ms, 500_ms);
+  chassis.pid_odom_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 300_ms, 500_ms);
   chassis.pid_turn_chain_constant_set(3_deg);
   chassis.pid_swing_chain_constant_set(5_deg);
   chassis.pid_drive_chain_constant_set(3_in);
@@ -106,88 +106,91 @@ void odom_test() {
 }
 
 void leftAuton() {
+  intake_lift.set(true);
   intake.set_state_and_move(Intake::State::INTAKING);
-  chassis.pid_drive_set(28_in, (DRIVE_SPEED-64));
-  chassis.pid_wait_quick();
-  pros::delay(200);
+  chassis.pid_drive_set(30_in, (DRIVE_SPEED-64));
+  chassis.pid_wait();
 
-  chassis.pid_turn_relative_set(84_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_turn_relative_set(60_deg, (TURN_SPEED+100));
+  chassis.pid_wait();
+ 
+  
+  chassis.pid_drive_set(10_in, (DRIVE_SPEED));
+  chassis.pid_wait();
   intake.set_state_and_move(Intake::State::NONE);
-
-  chassis.pid_drive_set(11_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  pros::delay(200);
   indexer.set(true);
   intake.set_state_and_move(Intake::State::OUTTAKING);
-  pros::delay(100);
+  pros::delay(250);
   intake.set_state_and_move(Intake::State::INTAKING);
   pros::delay(2000);
 
   intake.set_state_and_move(Intake::State::NONE);
   indexer.set(false);
-  chassis.pid_drive_set(-44_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_drive_set(-44_in, (DRIVE_SPEED+100));
+  chassis.pid_wait();
 
-  intake_lift.set(true);
+  intake_lift.set(false);
   lil_krith.set(true);
-  pros::delay(100);
-  chassis.pid_turn_relative_set(136_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+
+  chassis.pid_turn_relative_set(136_deg, (TURN_SPEED));
+  chassis.pid_wait();
 
   intake.set_state_and_move(Intake::State::INTAKING);
-  chassis.pid_drive_set(17_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
-  pros::delay(1000);
+  chassis.pid_drive_set(18_in, (DRIVE_SPEED+100));
+  chassis.pid_wait_quick_chain();
+  pros::delay(600);
   
-  chassis.pid_drive_set(-17_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_drive_set(-16_in, (DRIVE_SPEED+100));
+  chassis.pid_wait();
   intake.set_state_and_move(Intake::State::NONE);
   lil_krith.set(false);
-  pros::delay(200);
 
-  chassis.pid_turn_relative_set(175_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(16_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+
+  chassis.pid_turn_relative_set(177_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(16_in, (DRIVE_SPEED+100));
+  chassis.pid_wait();
   indexer.set(true);
   intake.set_state_and_move(Intake::State::OUTTAKING);
   pros::delay(200);
   intake.set_state_and_move(Intake::State::INTAKING);
-  pros::delay(3000);
+  pros::delay(2000);
   intake.set_state_and_move(Intake::State::NONE);
   
 
-  chassis.pid_drive_set(-10_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_drive_set(-10_in, (DRIVE_SPEED+100));
+  chassis.pid_wait();
 
-  chassis.pid_turn_relative_set(-100_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_turn_relative_set(-100_deg, (TURN_SPEED+100));
+  chassis.pid_wait();
   wing.set(true);
-  chassis.pid_drive_set(17_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
-  chassis.pid_turn_relative_set(110_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(20_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_drive_set(17_in, (DRIVE_SPEED+100));
+  chassis.pid_wait();
+  chassis.pid_turn_relative_set(110_deg, (TURN_SPEED+100));
+  chassis.pid_wait();
+  chassis.pid_drive_set(20_in, (DRIVE_SPEED+100));
+  chassis.pid_wait();
   wing.set(false);
-  chassis.pid_drive_set(14_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_drive_set(14_in, (DRIVE_SPEED+100));
+  chassis.pid_wait();
 
 
 }
 
 void rightAuton() {
+  intake_lift.set(true);
   intake.set_state_and_move(Intake::State::INTAKING);
   chassis.pid_drive_set(28_in, (DRIVE_SPEED-64));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   pros::delay(200);
 
   chassis.pid_turn_relative_set(-84_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   intake.set_state_and_move(Intake::State::NONE);
 
   chassis.pid_drive_set(11_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   indexer.set(true);
   intake.set_state_and_move(Intake::State::OUTTAKING);
   pros::delay(2000);
@@ -195,29 +198,29 @@ void rightAuton() {
   intake.set_state_and_move(Intake::State::NONE);
   indexer.set(false);
   chassis.pid_drive_set(-44_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
 
-  intake_lift.set(true);
+  intake_lift.set(false);
   lil_krith.set(true);
   pros::delay(100);
   chassis.pid_turn_relative_set(-136_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
 
   intake.set_state_and_move(Intake::State::INTAKING);
   chassis.pid_drive_set(17_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   pros::delay(1000);
   
   chassis.pid_drive_set(-17_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   intake.set_state_and_move(Intake::State::NONE);
   lil_krith.set(false);
   pros::delay(200);
 
   chassis.pid_turn_relative_set(175_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   chassis.pid_drive_set(16_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   indexer.set(true);
   intake.set_state_and_move(Intake::State::OUTTAKING);
   pros::delay(200);
@@ -227,18 +230,18 @@ void rightAuton() {
   
 
   chassis.pid_drive_set(-10_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
 
   chassis.pid_turn_relative_set(-100_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   wing.set(true);
   chassis.pid_drive_set(17_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   chassis.pid_turn_relative_set(110_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   chassis.pid_drive_set(20_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
   wing.set(false);
   chassis.pid_drive_set(14_in, (DRIVE_SPEED));
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
 }
