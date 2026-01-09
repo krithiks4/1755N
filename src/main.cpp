@@ -41,13 +41,16 @@ void initialize() {
   // Initialize intake motors
   intake.init();
 
+  // CRITICAL: Initialize tracking wheels
+  horiz_tracker.reset();
+  vert_tracker.reset();
+
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   chassis.odom_tracker_back_set(&horiz_tracker);
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   chassis.odom_tracker_left_set(&vert_tracker);
-
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
   chassis.opcontrol_drive_activebrake_set(0.0);
   chassis.opcontrol_curve_default_set(0.0, 0.0);
@@ -61,7 +64,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Right Auton", rightAuton},
+      {"Left Auton w/ Odom", leftOdomAuton},
+      {"Right Auton w/ Odom", rightOdomAuton},
       {"Left Auton", leftAuton},
       {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
       {"TURN TEST\n\nTurn 90 degrees", turn_test},
@@ -113,8 +117,11 @@ void autonomous() {
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
-  chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
+
+  // CRITICAL: Reset tracking wheels before auton
+  horiz_tracker.reset();
+  vert_tracker.reset();
 
   /*
   Odometry and Pure Pursuit are not magic
