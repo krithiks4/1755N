@@ -1,6 +1,6 @@
 #include "main.h"
 #include "autons.hpp"
-
+//heiio
 // Autonomous Constants
 // These are out of 127
 const int DRIVE_SPEED = 127;
@@ -9,6 +9,7 @@ const int SWING_SPEED = 90;
 
 // PID Constants
 void default_constants() {
+  
   // P, I, D, and Start I
   chassis.pid_drive_constants_set(5.0, 0.0, 40.0);
   chassis.pid_heading_constants_set(0.0, 0.0, 0.0);
@@ -95,46 +96,46 @@ void long_goal_base(okapi::QLength extraOffset = 0_in) {
 void right_side_auton() {
   chassis.odom_xyt_set(0_in, 0_in, 90_deg);
 
-  chassis.pid_drive_set(42.4_in, DRIVE_SPEED * 0.9);
-  chassis.pid_wait_quick();
-
-  // 2. turn towards driver
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-
   // 3. activate little will mech
   tongue_piston.set(true);
 
-  pros::delay(500);
+  chassis.pid_drive_set(41.5_in, DRIVE_SPEED * 0.9);
+  chassis.pid_wait_quick();
+
+  // 2. turn towards driver
+  chassis.pid_turn_set(180_deg - 2_deg, TURN_SPEED);
+  chassis.pid_wait_quick();
+
+  pros::delay(450);
 
   // 4. move 15 inches forward
-  chassis.pid_drive_set(14.3_in, DRIVE_SPEED);
+  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
-  // 5. intake for 0.5 second
+  // 5. intake for 1 second
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(400);
+  pros::delay(450);
 
   // 6. move in reverse 41.5 inches
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(-42.25_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-42_in, DRIVE_SPEED);
 
   // 7. deactivate little will mech while moving
   tongue_piston.set(false);
 
   // 8. once you finish moving 33 inches run high goal for 2.5 seconds
   chassis.pid_wait_quick();
+  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1950);
+  pros::delay(2200);
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // 9. move forward 19.5 inches
   chassis.pid_drive_set(26.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
-  // 10. move 135 degrees to the right
-  chassis.pid_turn_relative_set(135_deg, TURN_SPEED);
+  // 10. move 135 degrees to the left
+  chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);
   chassis.pid_wait_quick();
 
   // 11. move 60 inches forward
@@ -155,6 +156,72 @@ void right_side_auton() {
 void left_side_auton() {
   chassis.odom_xyt_set(0_in, 0_in, -90_deg);
 
+  // 3. activate little will mech
+  tongue_piston.set(true);
+
+  chassis.pid_drive_set(41.5_in, DRIVE_SPEED * 0.9);
+  chassis.pid_wait_quick();
+
+  // 2. turn towards driver
+  chassis.pid_turn_set(180_deg + 2_deg, TURN_SPEED);
+  chassis.pid_wait_quick();
+
+  pros::delay(450);
+
+  // 4. move 15 inches forward
+  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+
+  // 5. intake for 1 second
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  pros::delay(450);
+
+  // 6. move in reverse 41.5 inches
+  chassis.pid_drive_set(-42_in, DRIVE_SPEED);
+
+  // 7. deactivate little will mech while moving
+  tongue_piston.set(false);
+
+  // 8. once you finish moving 33 inches run high goal for 2.5 seconds
+  chassis.pid_wait_quick();
+  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(2200);
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 9. move forward 20 inches
+  chassis.pid_drive_set(28.15_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
+
+  // 10. move 135 degrees to the left
+  chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);
+  chassis.pid_wait_quick();
+
+  // 11. move 56.5 inches forward while intaking
+  chassis.pid_drive_set(63_in, DRIVE_SPEED * 0.6);
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  chassis.pid_wait();
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // 12. turn 180 degrees
+  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // 13. move 3.75 inches in reverse
+  chassis.pid_drive_set(-8_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 14. run high goal for 1.5 seconds
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(2000);
+  scoring.set_state_and_move(Scoring::State::NONE);
+}
+
+// comment because this function felt lonely without one
+void skills_auton() {
+  chassis.odom_xyt_set(0_in, 0_in, -90_deg);
+
   chassis.pid_drive_set(42.4_in, DRIVE_SPEED * 0.9);
   chassis.pid_wait_quick();
 
@@ -176,8 +243,6 @@ void left_side_auton() {
   pros::delay(400);
 
   // 6. move in reverse 41.5 inches
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
   chassis.pid_drive_set(-42.25_in, DRIVE_SPEED);
 
   // 7. deactivate little will mech while moving
@@ -185,113 +250,38 @@ void left_side_auton() {
 
   // 8. once you finish moving 33 inches run high goal for 2.5 seconds
   chassis.pid_wait_quick();
-  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(2500);
-  scoring.set_state_and_move(Scoring::State::NONE);
-
-  // 9. move forward 20 inches
-  chassis.pid_drive_set(31_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-
-  // 10. move 135 degrees to the left
-  chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-
-  // 11. move 56.5 inches forward while intaking
-  chassis.pid_drive_set(63.5_in, DRIVE_SPEED * 0.6);
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_wait();
-  scoring.set_state_and_move(Scoring::State::NONE);
-
-  // 12. turn 180 degrees
-  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  // 13. move 3.75 inches in reverse
-  chassis.pid_drive_set(-9_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  // 14. run high goal for 1.5 seconds
-  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1800);
-  scoring.set_state_and_move(Scoring::State::NONE);
-}
-
-// comment because this function felt lonely without one
-void skills_auton() {
-  chassis.odom_xyt_set(0_in, 0_in, -90_deg);
-
-  chassis.pid_drive_set(42.4_in, DRIVE_SPEED * 0.9);
-  chassis.pid_wait_quick();
-
-  // 2. turn towards driver
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-
-  // 3. activate little will mech
-  tongue_piston.set(true);
-
-  pros::delay(500);
-
-  // 4. move 15 inches forward, and extra offset
-  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-
-  // 5. intake for 1 second
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(800);
-
-  // 6. move in reverse 41.5 inches
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-  chassis.pid_drive_set(-42.25_in, DRIVE_SPEED);
-
-  // 7. deactivate little will mech while moving
-  tongue_piston.set(false);
-
-  // 8. once you finish moving 33 inches run high goal for 2.5 seconds
+  chassis.pid_drive_set(1.8_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2500);
   scoring.set_state_and_move(Scoring::State::NONE);
 
-  // away from goal
-  chassis.pid_drive_set(15_in, DRIVE_SPEED);
+  chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  // turn to right side
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(3.1_tile + 10.1_in, DRIVE_SPEED);
+  chassis.pid_drive_set(4_tile, DRIVE_SPEED);
   chassis.pid_wait();
 
-  // right side
-  chassis.odom_xyt_set(0_in, 0_in, 90_deg);
-
-  chassis.pid_drive_set(42.4_in, DRIVE_SPEED * 0.9);
-  chassis.pid_wait_quick();
-
-  // 2. turn towards driver
   chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  chassis.pid_wait();
 
   // 3. activate little will mech
   tongue_piston.set(true);
 
-  pros::delay(500);
+  pros::delay(400);
 
-  // 4. move 15 inches forward, and extra offset
-  chassis.pid_drive_set(29.9_in, DRIVE_SPEED);
+  // 4. move 15 inches forward
+  chassis.pid_drive_set(18.9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake for 1 second
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(800);
+  pros::delay(400);
 
   // 6. move in reverse 41.5 inches
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
   chassis.pid_drive_set(-42.25_in, DRIVE_SPEED);
 
   // 7. deactivate little will mech while moving
@@ -299,11 +289,9 @@ void skills_auton() {
 
   // 8. once you finish moving 33 inches run high goal for 2.5 seconds
   chassis.pid_wait_quick();
+  chassis.pid_drive_set(1.8_in, DRIVE_SPEED);
+  chassis.pid_wait_quick();
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2500);
-  scoring.set_state_and_move(Scoring::State::NONE); // use extra offset
-
-  // then do middle goals or something
-
-  // fefefe;fmekfmeqlkfmwel
+  scoring.set_state_and_move(Scoring::State::NONE);
 }

@@ -54,7 +54,7 @@ void ez_screen_task() {
         }
 
         if (ez::as::page_blank_is_on(1)) {
-          ez::screen_print("jfkaefjenkfjna ef", 1);
+          ez::screen_print("if you see this page, it means krithik sentiner is going to the goon jail", 1);
         }
       }
     }
@@ -99,8 +99,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
       {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
+      {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},  
       {"skills\n\n!!!!", skills_auton}
   });
 
@@ -230,7 +230,7 @@ void ez_template_extras() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);  // Set the motors to brake when enabled
   scoring.set_state_and_move(Scoring::State::NONE);
 
   while (true) {
@@ -239,7 +239,7 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     scoring.opcontrol(master);
 
-    middle_goal_piston.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
+    //middle_goal_piston.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
     tongue_piston.button_toggle(master.get_digital(DIGITAL_UP));
     
     pros::delay(ez::util::DELAY_TIME);
