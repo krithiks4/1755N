@@ -14,10 +14,13 @@ class Intake {
         enum class State {
             NONE,
             INTAKING,
-            OUTTAKING
+            OUTTAKING,
+            MIDDLE,
+            DP,
         };
-
+        pros::MotorGroup scoring_motors;
         pros::MotorGroup intake_motors;
+        
     private:
         State state = State::NONE;
 
@@ -25,10 +28,13 @@ class Intake {
 
         void move();
     public:
-        Intake(std::initializer_list<std::int8_t> intake_ports)
-            : intake_motors(intake_ports)
+        Intake(std::initializer_list<std::int8_t> intake_ports,
+           std::initializer_list<std::int8_t> scoring_ports)
+        : intake_motors(intake_ports),
+          scoring_motors(scoring_ports)
         {
             intake_motors.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+            scoring_motors.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
         }
 
         void init() {

@@ -5,25 +5,26 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-4, -5, -6}, // Left Chassis Ports (negative port will reverse it!) - SWAPPED
-    {1, 2, 3},    // Right Chassis Ports (negative port will reverse it!) - SWAPPED
+    {-14, -15, -16}, // Left Chassis Ports (negative port will reverse it!) - SWAPPED
+    {11, 12, 13},    // Right Chassis Ports (negative port will reverse it!) - SWAPPED
 
     8,      // IMU Port
-    4.125,  // Wheel diameter
-    450     // Cartridge RPM
+    3.25,  // Wheel diameter
+    400     // Cartridge RPM
 );
 
 // ===== SUBSYSTEMS =====
-// 2 motor intake group spinning same direction
-Intake intake({11, 12});
+// 3 motor intake group spinning same direction
+Intake intake({1, 2, -3}, {3});
+pros::Optical optical(17);
 
 // ===== ODOMETRY TRACKING WHEELS =====
 // - `9` and `10` are smart ports (making these negative will reverse the sensor)
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(9, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels (horizontal)
-ez::tracking_wheel vert_tracker(10, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels (vertical)
+ez::tracking_wheel vert_tracker(6, 2, 0.75);   // This tracking wheel is parallel to the drive wheels (vertical)
+ez::tracking_wheel horiz_tracker(7, 2, -0.25);  // This tracking wheel is perpendicular to the drive wheels (horizontal)
 
 // ===== INITIALIZATION =====
 /**
@@ -61,13 +62,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Right Auton", rightAuton},
-      {"Left Auton", leftAuton},
-      {"DRIVE FORWARD TEST\n\nDrive forward 24 inches", drive_test},
-      {"TURN TEST\n\nTurn 90 degrees", turn_test},
-      {"INTAKE TEST\n\nRun intake for 3 seconds", intake_test},
-      {"ODOM TEST\n\nTest odometry movement", odom_test},
-      {"PID TEST - DRIVE 24 INCHES", pid_tuning_test}
+      {"Left Qual", leftAuton},
   });
 
   chassis.initialize();
@@ -216,6 +211,42 @@ void ez_template_extras() {
       chassis.pid_tuner_disable();
   }
 }
+void DPMacro() {
+    static bool enabled = false;   // macro on or off
+    static bool fired = false;     // object already detected
+
+    // Toggle macro on button press
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+        enabled = !enabled;
+
+        if (!enabled) {
+            // Turning macro off
+            intake.set_state_and_move(Intake::State::NONE);
+            double_park.set(false);
+            fired = false;
+        }
+    }
+
+    // If macro is off, do nothing else
+    if (!enabled) return;
+
+    // Macro is on
+    intake.set_state_and_move(Intake::State::DP);
+
+    int proximity = optical.get_proximity();
+
+    // Fire once when object is close
+    if (proximity > 150 && !fired) {
+        
+        intake.set_state_and_move(Intake::State::INTAKING);
+        pros::delay(10);
+        double_park.set(true);   // stays down
+        fired = true;
+    }
+    if (fired) {
+        intake.set_state_and_move(Intake::State::NONE);
+    }
+}     
 
 // ===== OPERATOR CONTROL =====
 /**
@@ -240,20 +271,19 @@ void opcontrol() {
 
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     intake.opcontrol(master);
+    DPMacro();
 
-    // Pneumatic controls
-    intake_lift.button_toggle(master.get_digital(DIGITAL_UP));    // Port E - Up arrow
-    
-    // Indexer: L1 extends, L2 retracts
+    // Wing: L1 extends, L2 retracts
     if (master.get_digital(DIGITAL_L1)) {
-      indexer.set(true);   // Extend
+      wing.set(true);   // Extend
     } else if (master.get_digital(DIGITAL_L2)) {
-      indexer.set(false);  // Retract
+      wing.set(false);  // Retract
     }
-    
-    wing.button_toggle(master.get_digital(DIGITAL_A));            // Port G - Button A
-    lil_krith.button_toggle(master.get_digital(DIGITAL_Y)); // Port H - Button Y
+
+    lil_krith.button_toggle(master.get_digital(DIGITAL_Y)); // Port A - Button Y
     
     pros::delay(ez::util::DELAY_TIME);
   }
 }
+
+

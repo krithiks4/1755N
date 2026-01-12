@@ -8,7 +8,6 @@ extern Intake intake;
 
 // ===== PNEUMATICS =====
 // Four individual pistons
-inline ez::Piston intake_lift('E', false); 
-inline ez::Piston indexer('F', false);     
-inline ez::Piston wing('G', false);        
-inline ez::Piston lil_krith('H', false);  
+inline ez::Piston double_park('C', false);   
+inline ez::Piston wing('B', false);        
+inline ez::Piston lil_krith('A', false);  
