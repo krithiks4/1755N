@@ -54,124 +54,68 @@ void default_constants() {
 
 // long goal right side + middle low
 void right_side_auton() {
-  chassis.odom_xyt_set(0_in, 0_in, 90_deg);
-
-  // 3. activate little will mech
-  tongue_piston.set(true);
+  chassis.odom_xyt_set(0_in, 0_in, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
   
-  chassis.pid_odom_set({{2_tile, 0_in}, FORWARD, DRIVE_SPEED});
+  // go forward one tile
+  chassis.pid_odom_set({{1_tile, 0_in}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
-  // 2. turn towards driver
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+
+  // go to center balls
+  chassis.pid_odom_set({{1_tile, 1_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_wait_quick_chain();
+
+  // go to center goal
+  chassis.pid_odom_set({{0.5_tile, 1.5_tile, -45_deg}, FORWARD, DRIVE_SPEED});
+  chassis.pid_wait();
+
+  // low goal
+  scoring.set_state_and_move(Scoring::State::OUTTAKING);
+  pros::delay(2000);
+  scoring.set_state_and_move(Scoring::State::NONE);
+
+  // go to between high goal and loader (activate tonge)
+  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
+  tongue_piston.set(true);
+  chassis.pid_wait();
+
+  // 2. turn towards matchloader
+  chassis.pid_turn_set({2_tile, -1_tile}, FORWARD, TURN_SPEED);
   chassis.pid_wait_quick();
 
-  // 4. thrust forward
-  chassis.pid_odom_set(14.9_in, DRIVE_SPEED);
+  // 4. thrust forward (without odom)
+  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake
   scoring.set_state_and_move(Scoring::State::INTAKING);
   pros::delay(450);
 
-  // 6. move to long goal
-  chassis.pid_odom_set({{2_tile, 1_tile}, REVERSE, DRIVE_SPEED});
-
-  // 7. deactivate little will mech while moving
+  // 6. move to long goal (back some offset)
+  chassis.pid_odom_set({{2_tile, 1_tile - 10_in}, REVERSE, DRIVE_SPEED});
   tongue_piston.set(false);
-
-  // 8. once you finish moving 33 inches run high goal for 2.5 seconds
   chassis.pid_wait_quick();
+
+  // 8. run high goal
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(2200);
+  pros::delay(2000);
   scoring.set_state_and_move(Scoring::State::NONE);
 
-  // 9. move forward 19.5 inches
-  chassis.pid_drive_set(26.5_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
+  // go to between high goal and loader
+  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_wait();
 
-  // 10. move 135 degrees to the left
-  chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
+  // go to right side of goal so that wing can be used
+  chassis.pid_odom_set({{2.5_tile, 1.4_tile, 0_deg}, FORWARD, DRIVE_SPEED});
+  chassis.pid_wait();
 
-  // 11. move 60 inches forward
-  chassis.pid_drive_set(64_in, DRIVE_SPEED*0.7);
-
-  // 12. keep intaking until you reach 59 inches of the 63
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_wait_until(59_in);
-
-  // 13. for the next 5 inches run reverse intake
-  scoring.set_state_and_move(Scoring::State::OUTTAKING);
-  chassis.pid_wait_until(63_in);
-  scoring.set_state_and_move(Scoring::State::NONE);
-  
+  // go backwards to stop touching the balls????
 }
 
 // long goal left side + middle high
 void left_side_auton() {
   chassis.odom_xyt_set(0_in, 0_in, -90_deg);
-
-  // 3. activate little will mech
-  tongue_piston.set(true);
-
-  chassis.pid_drive_set(41.5_in, DRIVE_SPEED * 0.9);
-  chassis.pid_wait_quick();
-
-  // 2. turn towards driver
-  chassis.pid_turn_set(180_deg + 2_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-
-  pros::delay(450);
-
-  // 4. move 15 inches forward
-  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-
-  // 5. intake for 1 second
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(450);
-
-  // 6. move in reverse 41.5 inches
-  chassis.pid_drive_set(-42_in, DRIVE_SPEED);
-
-  // 7. deactivate little will mech while moving
-  tongue_piston.set(false);
-
-  // 8. once you finish moving 33 inches run high goal for 2.5 seconds
-  chassis.pid_wait_quick();
-  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);
-  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(2200);
-  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  scoring.set_state_and_move(Scoring::State::NONE);
-
-  // 9. move forward 20 inches
-  chassis.pid_drive_set(28.15_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-
-  // 10. move 135 degrees to the left
-  chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);
-  chassis.pid_wait_quick();
-
-  // 11. move 56.5 inches forward while intaking
-  chassis.pid_drive_set(63_in, DRIVE_SPEED * 0.6);
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_wait();
-  scoring.set_state_and_move(Scoring::State::NONE);
-
-  // 12. turn 180 degrees
-  chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  // 13. move 3.75 inches in reverse
-  chassis.pid_drive_set(-8_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  // 14. run high goal for 1.5 seconds
-  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(2000);
-  scoring.set_state_and_move(Scoring::State::NONE);
 }
 
 // comment because this function felt lonely without one
