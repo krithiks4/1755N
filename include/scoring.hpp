@@ -1,10 +1,9 @@
-// Scoring Mechanism
-// Top Motor (12) and Bottom Motor (11)
-
 #pragma once
 
-#include "api.h"
+#include "main.h"
 
+// Scoring Mechanism
+// Top Motor (12) and Bottom Motor (11)
 class Scoring {
     public:
         enum class State {

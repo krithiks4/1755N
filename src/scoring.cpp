@@ -1,4 +1,3 @@
-#include "main.h"
 #include "scoring.hpp"
 
 void Scoring::move() {

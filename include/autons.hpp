@@ -1,10 +1,6 @@
-/*
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at http://mozilla.org/MPL/2.0/.
-*/
-
 #pragma once
+
+#include "main.h"
 
 void default_constants();
 
@@ -12,13 +8,3 @@ void right_side_auton(); // Right side autonomous routine
 void left_side_auton(); // Left side autonomous routine
 
 void skills_auton();
-
-#pragma region tests
-void pid_tuning_48_in();
-void pid_tuning_test();
-void drive_test(); // Drive forward and backward test
-void turn_test(); // Turn test
-void intake_test(); // Intake test
-void odom_test(); // Odometry test
-void odom_test_points(); // Odometry test2
-#pragma endregion tests
