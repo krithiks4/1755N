@@ -1,6 +1,8 @@
 #pragma once
 
-#include "main.h"
+#include "EZ-Template/api.hpp"
+
+class Scoring;
 
 // Subsystem Declarations
 extern ez::Drive chassis;
