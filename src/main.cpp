@@ -12,8 +12,8 @@
 // Chassis Configuration
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {19, -18, -17},  // Left Chassis Ports (back 19 normal, middle 18 & front 17 reversed)
-    {-16, 15, 14},   // Right Chassis Ports (back 16 reversed, middle 15 & front 14 normal)
+    {-17, -20, 19},  // Left Chassis Ports
+    {-16, 15, 14},   // Right Chassis Ports
 
     10,     // IMU Port (Vex key 10)
     4.125,  // Wheel diameter
