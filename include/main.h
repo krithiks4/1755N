@@ -44,6 +44,9 @@
 #include "EZ-Template/api.hpp"
 #include "scoring.hpp"
 #include "autons.hpp"
+#include "autons/leftside.hpp"
+#include "autons/rightside.hpp"
+#include "autons/skills.hpp"
 #include "subsystems.hpp"
 
 /**
