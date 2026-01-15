@@ -2,16 +2,12 @@
 
 // long goal right side + middle low
 void right_side_auton() {
-  chassis.odom_xyt_set(0_in, 0_in, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
-  
-  // go forward one tile
-  chassis.pid_odom_set({{1_tile, 0_in}, FORWARD, DRIVE_SPEED});
-  chassis.pid_wait();
+  chassis.odom_xyt_set(0.5_tile, 0_in, 45_deg); // ORIGIN POSITION: X: EXACTLY MIDDLE OF FIELD, Y: 1 TILE from SIDE
 
   scoring.set_state_and_move(Scoring::State::INTAKING);
 
   // go to center balls
-  chassis.pid_odom_set({{1_tile, 1_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{1_tile, 1_tile, 0_deg}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait_quick_chain();
 
   // go to center goal
