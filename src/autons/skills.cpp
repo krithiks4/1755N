@@ -37,16 +37,6 @@ void skills_auton() {
   chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
-  // ACTIVATE WING
-
-  // go to right side of goal so that wing can be used
-  chassis.pid_odom_set({{2.5_tile, 1.4_tile, 0_deg}, FORWARD, DRIVE_SPEED});
-  chassis.pid_wait();
-
-  // go back
-  chassis.pid_odom_set({{2.5_tile, 0_tile}, REVERSE, DRIVE_SPEED});
-  chassis.pid_wait();
-
   // Go to left side
   chassis.pid_odom_set({{-2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
@@ -77,16 +67,6 @@ void skills_auton() {
 
   // go to between high goal and loader
   chassis.pid_odom_set({{-2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
-  chassis.pid_wait();
-
-  // ACTIVATE WING
-
-  // go to right side of goal so that wing can be used
-  chassis.pid_odom_set({{-1.5_tile, 1.4_tile, 0_deg}, FORWARD, DRIVE_SPEED});
-  chassis.pid_wait();
-
-  // go back
-  chassis.pid_odom_set({{-1.5_tile, 0_tile, 0_deg}, REVERSE, DRIVE_SPEED});
   chassis.pid_wait();
 
   // PARK

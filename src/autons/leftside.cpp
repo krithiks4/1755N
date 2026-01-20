@@ -2,13 +2,13 @@
 
 // long goal left side + middle high
 void left_side_auton() {
-  chassis.odom_xyt_set(-0.5_tile, 0_in, -45_deg); // ORIGIN POSITION: X: EXACTLY MIDDLE OF FIELD, Y: 1 TILE from SIDE
+  chassis.odom_xyt_set(-5_in, -1_in, 0_deg); // ORIGIN POSITION: X: EXACTLY MIDDLE OF FIELD, Y: 1 TILE from SIDE
 
   scoring.set_state_and_move(Scoring::State::INTAKING);
 
   // go to center balls
   chassis.pid_odom_set({{-1_tile, 1_tile, 0_deg}, FORWARD, DRIVE_SPEED});
-  chassis.pid_wait_quick_chain();
+  chassis.pid_wait();
 
   // go to center goal
   chassis.pid_odom_set({{-0.5_tile, 1.5_tile, 45_deg}, REVERSE, DRIVE_SPEED});

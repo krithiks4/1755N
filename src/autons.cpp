@@ -4,7 +4,7 @@
 void default_constants() {
   
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(5.0, 0.0, 40.0);
+  chassis.pid_drive_constants_set(6.5, 0.0, 53.0);
   chassis.pid_heading_constants_set(0.0, 0.0, 0.0);
   chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);
   chassis.pid_swing_constants_set(5.0, 0.0, 30.0);

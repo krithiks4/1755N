@@ -13,7 +13,7 @@
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
     {-17, -20, 19},  // Left Chassis Ports
-    {-16, 15, 14},   // Right Chassis Ports
+    {15, 14, -16},   // Right Chassis Ports
 
     10,     // IMU Port (Vex key 10)
     4.125,  // Wheel diameter
@@ -25,8 +25,8 @@ ez::Drive chassis(
 Scoring scoring(12, 11);
 
 // Odometry Tracking Wheels
-ez::tracking_wheel horiz_tracker(21, 1.5, 2);
-//ez::tracking_wheel vert_tracker(20, 2, 0);
+ez::tracking_wheel horiz_tracker(21, 1.5, 3);
+ez::tracking_wheel vert_tracker(2, 1.5, 0);
 
 /**
  * Ez screen task
@@ -84,7 +84,7 @@ void initialize() {
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   chassis.odom_tracker_back_set(&horiz_tracker);
-  //chassis.odom_tracker_left_set(&vert_tracker);
+  chassis.odom_tracker_left_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
   chassis.opcontrol_drive_activebrake_set(0.0);
@@ -239,7 +239,7 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     scoring.opcontrol(master);
 
-    //middle_goal_piston.buttons(master.get_digital(DIGITAL_R1), master.get_digital(DIGITAL_R2));
+    what_is_this_piston_Bru.buttons(master.get_digital(DIGITAL_RIGHT), master.get_digital(DIGITAL_LEFT));
     tongue_piston.button_toggle(master.get_digital(DIGITAL_UP));
     
     pros::delay(ez::util::DELAY_TIME);

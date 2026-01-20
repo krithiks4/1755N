@@ -9,5 +9,5 @@ extern ez::Drive chassis;
 extern Scoring scoring;
 
 // Pneumatics
-// Tongue mech piston (G)
-inline ez::Piston tongue_piston('G', false);  // Tongue mech piston
+inline ez::Piston tongue_piston('G', false);
+inline ez::Piston what_is_this_piston_Bru('H', false);

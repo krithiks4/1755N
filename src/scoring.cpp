@@ -15,8 +15,8 @@ void Scoring::move() {
             break;
         case State::OUTTAKING:
             // Both motors spinning reverse
-            top_motor.move_voltage(-12000 * 0.8);    // 12V reverse
-            bottom_motor.move_voltage(-12000 * 0.8); // 12V reverse
+            top_motor.move_voltage(12000);    // 12V reverse
+            bottom_motor.move_voltage(-12000); // 12V reverse
             break;
         case State::STORAGE:
             // Storage is only bottom motor going forward
