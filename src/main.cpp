@@ -25,8 +25,8 @@ ez::Drive chassis(
 Scoring scoring(12, 11);
 
 // Odometry Tracking Wheels
-ez::tracking_wheel horiz_tracker(21, 1.5, 3);
-ez::tracking_wheel vert_tracker(2, 1.5, 0);
+ez::tracking_wheel horiz_tracker(21, 2, 3);
+ez::tracking_wheel vert_tracker(2, 2, 0);
 
 /**
  * Ez screen task
@@ -99,9 +99,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"skills\n\n!!!!", skills_auton},
       {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
-      {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},  
-      {"skills\n\n!!!!", skills_auton}
+      {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
+      {"tests\n\ntets!!!", test_auton}
   });
 
   chassis.initialize();

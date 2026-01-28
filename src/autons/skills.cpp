@@ -2,7 +2,7 @@
 
 // comment because this function felt lonely without one
 void skills_auton() {
-  chassis.odom_xyt_set(0_in, 0_in, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
+  chassis.odom_xyt_set(0_tile, 0_tile, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
 
   // RIGHT SIDE
 
@@ -24,7 +24,7 @@ void skills_auton() {
   pros::delay(450);
 
   // 6. move to long goal (back some offset)
-  chassis.pid_odom_set({{2_tile, 1_tile - 10_in}, REVERSE, DRIVE_SPEED});
+  chassis.pid_odom_set({{2_tile, 1_tile - 5_in}, REVERSE, DRIVE_SPEED});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
@@ -56,7 +56,7 @@ void skills_auton() {
   pros::delay(450);
 
   // 6. move to long goal (back some offset)
-  chassis.pid_odom_set({{-2_tile, 1_tile - 10_in}, REVERSE, DRIVE_SPEED});
+  chassis.pid_odom_set({{-2_tile, 1_tile - 5_in}, REVERSE, DRIVE_SPEED});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
@@ -79,7 +79,11 @@ void skills_auton() {
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 
+  // go forward to 'charge up park'
+  chassis.pid_drive_set(15_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
   // go back fast to park (no odom)
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-36_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 }

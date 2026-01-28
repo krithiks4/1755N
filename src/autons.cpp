@@ -4,7 +4,8 @@
 void default_constants() {
   
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(6.5, 0.0, 53.0);
+  chassis.pid_drive_constants_forward_set(7.0, 0.0, 70.0);
+  chassis.pid_drive_constants_backward_set(6.5, 0.0, 53.0);
   chassis.pid_heading_constants_set(0.0, 0.0, 0.0);
   chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);
   chassis.pid_swing_constants_set(5.0, 0.0, 30.0);
@@ -43,3 +44,9 @@ void default_constants() {
  * driver's right = 90 deg, positive X
  * driver's left = -90 deg / 270 deg, negative X
  */
+
+ void test_auton() {
+  chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  chassis.pid_odom_set({{0_in, 20_in}, FORWARD, 50});
+  chassis.pid_wait();
+ }
