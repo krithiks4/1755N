@@ -24,7 +24,7 @@ void skills_auton() {
   pros::delay(450);
 
   // 6. move to long goal (back some offset)
-  chassis.pid_odom_set({{2_tile, 1_tile - 5_in}, REVERSE, DRIVE_SPEED});
+  chassis.pid_odom_set({{2_tile, 1_tile - 5_in}, REVERSE, (int) (DRIVE_SPEED * 0.5)});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
@@ -34,7 +34,7 @@ void skills_auton() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // go to between high goal and loader
-  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
   chassis.pid_wait();
 
   // Go to left side
@@ -56,7 +56,7 @@ void skills_auton() {
   pros::delay(450);
 
   // 6. move to long goal (back some offset)
-  chassis.pid_odom_set({{-2_tile, 1_tile - 5_in}, REVERSE, DRIVE_SPEED});
+  chassis.pid_odom_set({{-2_tile, 1_tile - 5_in}, REVERSE, (int) (DRIVE_SPEED * 0.5)});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
@@ -66,7 +66,7 @@ void skills_auton() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // go to between high goal and loader
-  chassis.pid_odom_set({{-2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{-2_tile, 0_tile}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
   chassis.pid_wait();
 
   // PARK
