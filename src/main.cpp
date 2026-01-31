@@ -15,8 +15,8 @@ ez::Drive chassis(
     {-17, -20, 19},  // Left Chassis Ports
     {15, 14, -16},   // Right Chassis Ports
 
-    10,     // IMU Port (Vex key 10)
-    4.125,  // Wheel diameter
+    10,     // IMU Port
+    3.25,   // Wheel diameter
     450     // Cartridge RPM
 );
 
@@ -25,7 +25,7 @@ ez::Drive chassis(
 Scoring scoring(12, 11);
 
 // Odometry Tracking Wheels
-ez::tracking_wheel horiz_tracker(21, 2, 3);
+ez::tracking_wheel horiz_tracker(21, 2, 0.5);
 ez::tracking_wheel vert_tracker(2, 2, 0);
 
 /**
