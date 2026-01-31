@@ -2,12 +2,12 @@
 
 // comment because this function felt lonely without one
 void skills_auton() {
-  chassis.odom_xyt_set(-3_in, 0_tile, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
+  chassis.odom_xyt_set(0_in, -1_in, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
 
   // RIGHT SIDE
 
   // go to between high goal and loader (activate tonge)
-  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({2_tile, 0_tile});
   tongue_piston.set(true);
   chassis.pid_wait();
 
@@ -16,7 +16,7 @@ void skills_auton() {
   chassis.pid_wait_quick();
 
   // 4. thrust forward (without odom)
-  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake
@@ -48,7 +48,7 @@ void skills_auton() {
   chassis.pid_wait_quick();
 
   // 4. thrust forward (without odom)
-  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake

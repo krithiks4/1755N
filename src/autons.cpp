@@ -4,7 +4,7 @@
 void default_constants() {
   
   // P, I, D, and Start I
-  chassis.pid_drive_constants_forward_set(7.0, 0.0, 65.0);
+  chassis.pid_drive_constants_forward_set(7.8, 0.0, 45.0);
   chassis.pid_drive_constants_backward_set(6.5, 0.0, 53.0);
   chassis.pid_heading_constants_set(4.0, 0.0, 6.0);
   chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);
@@ -25,9 +25,9 @@ void default_constants() {
   chassis.pid_drive_chain_constant_set(5_in);
 
   // Slew constants
-  chassis.slew_turn_constants_set(3_deg, 70);
-  chassis.slew_drive_constants_set(3_in, 50);
-  chassis.slew_swing_constants_set(3_in, 60);
+  chassis.slew_turn_constants_set(4_deg, DRIVE_SPEED);
+  chassis.slew_drive_constants_set(5_in, DRIVE_SPEED);
+  chassis.slew_swing_constants_set(3_in, DRIVE_SPEED);
 
   chassis.odom_turn_bias_set(0.95);
   chassis.odom_look_ahead_set(7_in);
@@ -47,6 +47,6 @@ void default_constants() {
 
  void test_auton() {
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
-  chassis.pid_odom_set({{0_in, 20_in}, FORWARD, 50});
+  chassis.pid_odom_set({{0_in, 20_in}, FORWARD, 127});
   chassis.pid_wait();
- }
+}
