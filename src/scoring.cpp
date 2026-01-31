@@ -4,20 +4,20 @@ void Scoring::move() {
     switch (state) {
         case State::INTAKING:
             top_motor.move_voltage(12000);
-            bottom_motor.move_voltage(-12000);
+            bottom_motor.move_voltage(12000);
             break;
         case State::MIDDLE_GOAL:
         case State::HIGH_GOAL:
             top_motor.move_voltage(-12000);
-            bottom_motor.move_voltage(-12000);
+            bottom_motor.move_voltage(12000);
             break;
         case State::OUTTAKING:
             top_motor.move_voltage(12000);
-            bottom_motor.move_voltage(12000);
+            bottom_motor.move_voltage(-12000);
             break;
         case State::STORAGE:
             top_motor.brake();
-            bottom_motor.move_voltage(-12000);
+            bottom_motor.move_voltage(12000);
             break;
         case State::NONE:
         default:

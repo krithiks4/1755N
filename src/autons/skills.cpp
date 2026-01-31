@@ -2,7 +2,7 @@
 
 // comment because this function felt lonely without one
 void skills_auton() {
-  chassis.odom_xyt_set(0_tile, 0_tile, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
+  chassis.odom_xyt_set(-3_in, 0_tile, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
 
   // RIGHT SIDE
 
@@ -84,6 +84,6 @@ void skills_auton() {
   chassis.pid_wait_quick_chain();
 
   // go back fast to park (no odom)
-  chassis.pid_drive_set(-36_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-40_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 }
