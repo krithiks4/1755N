@@ -240,7 +240,7 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     scoring.opcontrol(master);
 
-    what_is_this_piston_Bru.buttons(master.get_digital(DIGITAL_RIGHT), master.get_digital(DIGITAL_LEFT));
+    wing_piston.button_toggle(master.get_digital(DIGITAL_RIGHT));
     tongue_piston.button_toggle(master.get_digital(DIGITAL_UP));
     
     pros::delay(ez::util::DELAY_TIME);
