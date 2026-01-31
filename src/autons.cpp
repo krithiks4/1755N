@@ -4,13 +4,13 @@
 void default_constants() {
   
   // P, I, D, and Start I
-  chassis.pid_drive_constants_forward_set(15.5, 0.0, 0.01);
-  chassis.pid_drive_constants_backward_set(12.5, 0.0, 0.01);
-  chassis.pid_heading_constants_set(4.5, 0.0, 0.01);
-  chassis.pid_turn_constants_set(2.0, 0.0, 0.01, 15);
-  chassis.pid_swing_constants_set(5.0, 0.0, 0.01);
-  chassis.pid_odom_angular_constants_set(10.0, 0.0, 0.01);
-  chassis.pid_odom_boomerang_constants_set(8.0, 0.0, 0.01);
+  chassis.pid_drive_constants_forward_set(15.0, 0.0, 45.3);
+  chassis.pid_drive_constants_backward_set(15.5, 0.0, 45.3);
+  chassis.pid_heading_constants_set(0.0, 0.0, 0.0);
+  chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);
+  chassis.pid_swing_constants_set(5.0, 0.0, 30.0);
+  chassis.pid_odom_angular_constants_set(6.0, 0.0, 50.0);
+  chassis.pid_odom_boomerang_constants_set(5.0, 0.0, 45.0);
 
   // Exit conditions - REDUCED TIMEOUTS FOR SPEED
   chassis.pid_turn_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 250_ms);
@@ -24,18 +24,16 @@ void default_constants() {
   chassis.pid_swing_chain_constant_set(7_deg);
   chassis.pid_drive_chain_constant_set(5_in);
 
-  // Slew constants (relaxed ramp for faster odom movement)
-  chassis.slew_turn_constants_set(4_deg, DRIVE_SPEED);
-  chassis.slew_drive_constants_set(4_in, DRIVE_SPEED);
-  chassis.slew_swing_constants_set(3_in, DRIVE_SPEED);
+  // Slew constants
+  chassis.slew_turn_constants_set(3_deg, 70);
+  chassis.slew_drive_constants_set(3_in, 50);
+  chassis.slew_swing_constants_set(3_in, 60);
 
   chassis.odom_turn_bias_set(0.95);
-  chassis.odom_look_ahead_set(18_in);
-  chassis.odom_boomerang_distance_set(24_in);
-  chassis.odom_boomerang_dlead_set(0.85);
+  chassis.odom_look_ahead_set(7_in);
+  chassis.odom_boomerang_distance_set(16_in);
+  chassis.odom_boomerang_dlead_set(0.625);
   chassis.pid_angle_behavior_set(ez::shortest);
-
-  chassis.slew_drive_set(true);
 }
 
 /*
@@ -49,6 +47,6 @@ void default_constants() {
 
  void test_auton() {
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
-  chassis.pid_odom_set(10_in, DRIVE_SPEED);
+  chassis.pid_odom_set({{0_in, 48_in}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
-}
+ }

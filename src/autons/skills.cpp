@@ -2,12 +2,12 @@
 
 // comment because this function felt lonely without one
 void skills_auton() {
-  chassis.odom_xyt_set(0_in, -1_in, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
+  chassis.odom_xyt_set(0_in, 0_in, 90_deg); // STARTING POSITION: ROTATION: FACE RIGHT, X: EXACTLY MIDDLE OF FIELD, Y: RIGHT SIDE TOUCHING PARKING ZONE
 
   // RIGHT SIDE
 
   // go to between high goal and loader (activate tonge)
-  chassis.pid_odom_set({2_tile, 0_tile});
+  chassis.pid_odom_set({{2_tile - 5_in, 0_tile}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
   // 2. turn towards matchloader
@@ -80,7 +80,7 @@ void skills_auton() {
   chassis.pid_wait();
 
   // go forward to 'charge up park'
-  chassis.pid_drive_set(15_in, DRIVE_SPEED);
+  chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 
   // go back fast to park (no odom)

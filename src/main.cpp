@@ -1,23 +1,18 @@
 #include "main.h"
 
 /*
- * Authored by the single and only Ethan "Goon" Chen
- * Who is ethan chen?
- * Ethan chen is the legend who single-handedly built 1755N from the ground up
- * He is also a fantastic programmer and an even more fantastic person
- * If you see him, be sure to thank him for all his hard work!
- * - Goon
+ * when the world needed Ethan "Goon" Chen most...
+ * he dissapeared
  */
 
 // Chassis Configuration
 ez::Drive chassis(
-    // These are your drive motors, the first motor is used for sensing!
-    {-17, -20, 19},  // Left Chassis Ports
-    {15, 14, -16},   // Right Chassis Ports
-
-    10,     // IMU Port
-    3.25,   // Wheel diameter
-    450     // Cartridge RPM
+  {-17, -20, 19}, // Left Chassis Ports
+  {15, 14, -16},  // Right Chassis Ports
+  10,             // IMU Port
+  3.25,           // Wheel diameter
+  600,            // Cartridge RPM
+  4.0 / 3.0       // wheel gear / motor gear
 );
 
 // Subsystems
@@ -99,10 +94,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"tests\n\ntets!!!", test_auton},
-      {"skills\n\n!!!!", skills_auton},
-      {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
-      {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton}
+    {"skills\n\n!!!!", skills_auton},
+    {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
+    {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
+    {"tests\n\ntets!!!", test_auton}
   });
 
   chassis.initialize();
