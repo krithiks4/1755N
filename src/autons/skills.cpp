@@ -45,7 +45,7 @@ void skills_auton() {
   // 8. run high goal
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2000);
-  chassis.odom_xy_set(2_tile, 1_tile - 5_in); // checkp
+  chassis.odom_xy_set(2_tile, 1_tile - 5_in); // reset pos
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // go to between high goal and loader
@@ -91,14 +91,18 @@ void skills_auton() {
   // 8. run high goal
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2000);
-  chassis.odom_xy_set(-2_tile, 1_tile - 5_in); // checkp2
+  chassis.odom_xy_set(-2_tile, 1_tile - 5_in); // reset position 2
   scoring.set_state_and_move(Scoring::State::NONE);
+
+  // go to between high goal and loader
+  chassis.pid_odom_set({{-2_tile, 0.5_tile}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
+  chassis.pid_wait();
+
+  // PARK
 
   // go to posisition before parking zone
   chassis.pid_odom_set({{0.5_tile, -0.5_tile, 90_deg}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
   chassis.pid_wait();
-
-  // PARK
 
   // go back to 'charge up park'
   chassis.pid_drive_set(-10_in, DRIVE_SPEED);
