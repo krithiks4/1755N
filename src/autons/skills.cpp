@@ -7,38 +7,46 @@ void skills_auton() {
   // RIGHT SIDE
 
   // go to between high goal and loader (activate tonge)
-  chassis.pid_odom_set({{2_tile - 5_in, 0_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{2_tile - 3_in, 0_tile}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
   // 2. turn towards matchloader
-  tongue_piston.set(true);
-  chassis.pid_turn_set({2_tile, -1_tile}, FORWARD, TURN_SPEED);
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait_quick();
 
+  tongue_piston.set(true);
+  pros::delay(500);
+
   // 4. thrust forward (without odom)
-  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_drive_set(14.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(450);
+  for (int i = 0; i < 5; i++) {
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_drive_set(3_in, DRIVE_SPEED);
+    chassis.pid_wait();
+  }
 
   // 6. move to long goal (back some offset)
-  chassis.pid_odom_set({{2_tile, 1_tile - 5_in}, REVERSE, (int) (DRIVE_SPEED * 0.8)});
+  chassis.pid_odom_set({{2_tile - 5_in, 1_tile - 5_in}, REVERSE, (int) (DRIVE_SPEED * 0.5)});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
   // 8. run high goal
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2000);
+  chassis.odom_xy_set(2_tile, 1_tile - 6_in); // checkp
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // go to between high goal and loader
-  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, (int) (DRIVE_SPEED * 0.8)});
+  chassis.pid_odom_set({{2_tile + 3_in, 0.5_tile}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
   chassis.pid_wait();
 
   // Go to left side
-  chassis.pid_odom_set({{-2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{-2_tile + 3_in, 0.5_tile}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
   // LEFT SIDE
@@ -47,16 +55,24 @@ void skills_auton() {
   chassis.pid_turn_set({-2_tile, -1_tile}, FORWARD, TURN_SPEED);
   chassis.pid_wait_quick();
 
+  tongue_piston.set(true);
+  pros::delay(500);
+
   // 4. thrust forward (without odom)
-  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_drive_set(14.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick();
 
   // 5. intake
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(450);
+  for (int i = 0; i < 5; i++) {
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_drive_set(3_in, DRIVE_SPEED);
+    chassis.pid_wait();
+  }
 
   // 6. move to long goal (back some offset)
-  chassis.pid_odom_set({{-2_tile, 1_tile - 5_in}, REVERSE, (int) (DRIVE_SPEED * 0.8)});
+  chassis.pid_odom_set({{-2_tile, 1_tile - 5_in}, REVERSE, (int) (DRIVE_SPEED * 0.5)});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
@@ -66,13 +82,13 @@ void skills_auton() {
   scoring.set_state_and_move(Scoring::State::NONE);
 
   // go to between high goal and loader
-  chassis.pid_odom_set({{-2_tile, 0_tile}, FORWARD, (int) (DRIVE_SPEED * 0.8)});
+  chassis.pid_odom_set({{-2_tile, 0.5_tile}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
   chassis.pid_wait();
 
   // PARK
 
   // go to starting position to park
-  chassis.pid_odom_set({{0_in, 0_in}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{0_tile, 0.5_tile}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
   // point to the enemy side

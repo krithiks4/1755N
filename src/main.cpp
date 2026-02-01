@@ -21,7 +21,7 @@ Scoring scoring(12, 11);
 
 // Odometry Tracking Wheels
 ez::tracking_wheel horiz_tracker(21, 2, 0.5);
-ez::tracking_wheel vert_tracker(2, 2, 0);
+//ez::tracking_wheel vert_tracker(2, 2, 0);
 
 /**
  * Ez screen task
@@ -79,7 +79,7 @@ void initialize() {
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   chassis.odom_tracker_back_set(&horiz_tracker);
-  chassis.odom_tracker_left_set(&vert_tracker);
+  //chassis.odom_tracker_left_set(&vert_tracker);
 
   chassis.opcontrol_curve_buttons_toggle(false); // Disable curve buttons since we're using custom control
   chassis.opcontrol_drive_activebrake_set(0.0);
