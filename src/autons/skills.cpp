@@ -9,7 +9,7 @@ void skills_auton() {
   // RIGHT SIDE
 
   // go to between high goal and loader (activate tonge)
-  chassis.pid_odom_set({{2_tile - 8.75_in, 0_tile}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{2_tile - 8.45_in, 0_tile}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
   // 2. turn towards matchloader
@@ -21,7 +21,7 @@ void skills_auton() {
 
   // 4. thrust forward (without odom)
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_drive_set(15_in, DRIVE_SPEED);
+  chassis.pid_drive_set(15_in, DRIVE_SPEED*0.8);
   chassis.pid_wait_quick();
 
   // 5. intake
@@ -30,7 +30,7 @@ void skills_auton() {
     chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
     chassis.pid_wait();
 
-        chassis.pid_drive_set(3.5_in, DRIVE_SPEED);
+        chassis.pid_drive_set(3.35_in, DRIVE_SPEED);
     chassis.pid_wait();
 
     scoring.set_state_and_move(Scoring::State::INTAKING);
@@ -38,23 +38,20 @@ void skills_auton() {
 
   // 6. move to long goal (back some offset)
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_odom_set(-1_tile - 10_in, (int) (DRIVE_SPEED * 0.5));
+  chassis.pid_odom_set(-1_tile - 12.5_in, (int) (DRIVE_SPEED * 0.6));
   //tongue_piston.set(false);
   chassis.pid_wait_quick();
 
   // 8. run high goal
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1250);
-  //antijam
-  scoring.set_state_and_move(Scoring::State::OUTTAKING);
-  pros::delay(300);
-  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2250);
-  //antijam
-  scoring.set_state_and_move(Scoring::State::OUTTAKING);
-  pros::delay(300);
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(2250);
+  pros::delay(2750);
+   //antijam
+   scoring.set_state_and_move(Scoring::State::OUTTAKING);
+   pros::delay(300);
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(3250);
   chassis.odom_xy_set(2_tile, 1_tile - 5_in); // reset pos
   scoring.set_state_and_move(Scoring::State::NONE);
   tongue_piston.set(false);
@@ -77,16 +74,16 @@ void skills_auton() {
   pros::delay(500);
 
   // 4. thrust forward (without odom)
-  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED*0.9);
   chassis.pid_wait_quick();
 
   // 5. intake
   scoring.set_state_and_move(Scoring::State::INTAKING);
   for (int i = 0; i < 6; i++) {
-    chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-2.6_in, DRIVE_SPEED);
     chassis.pid_wait();
 
-    chassis.pid_drive_set(3.5_in, DRIVE_SPEED);
+    chassis.pid_drive_set(3.4_in, DRIVE_SPEED);
     chassis.pid_wait();
     
     scoring.set_state_and_move(Scoring::State::INTAKING);
@@ -99,39 +96,26 @@ void skills_auton() {
 
   // 8. run high goal
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1250);
-  //antijam
-  scoring.set_state_and_move(Scoring::State::OUTTAKING);
-  pros::delay(300);
-  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2250);
-  //antijam
-  scoring.set_state_and_move(Scoring::State::OUTTAKING);
-  pros::delay(300);
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(2250);
-  chassis.odom_xy_set(-2_tile, 1_tile - 5_in); // reset position 2
+  pros::delay(2750);
+   //antijam
+   scoring.set_state_and_move(Scoring::State::OUTTAKING);
+   pros::delay(300);
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(3250);
+  chassis.odom_xy_set(2_tile, 1_tile - 5_in); // reset pos
   scoring.set_state_and_move(Scoring::State::NONE);
   tongue_piston.set(false);
 
-  // go to between high goal and loader
-  chassis.pid_odom_set({{-2_tile, 0.5_tile}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
-  chassis.pid_wait();
+  // // go to between high goal and loader
+  // chassis.pid_odom_set({{-2_tile, 0.5_tile}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
+  // chassis.pid_wait();
 
   // PARK
 
   // go to posisition before parking zone and shoot out balls if collected
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  chassis.pid_odom_set({{0.5_tile, -0.5_tile, 90_deg}, FORWARD, (int) (DRIVE_SPEED * 1)});
+  chassis.pid_odom_set({{-0.5_tile, -0.5_tile, 90_deg}, FORWARD, (int) (DRIVE_SPEED * 0.5)});
   chassis.pid_wait();
-
-  // go back to 'charge up park'
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  // go forward fast to park (no odom)
-  //shoot out balls
-  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  chassis.pid_drive_set(40_in, DRIVE_SPEED);
-  chassis.pid_wait_quick_chain();
 }
