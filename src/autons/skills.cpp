@@ -25,13 +25,7 @@ void skills_auton() {
   chassis.pid_wait_quick();
 
   // 5. intake
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-  for (int i = 0; i < 6; i++) {
-    chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
-    chassis.pid_wait();
-    chassis.pid_drive_set(3.35_in, DRIVE_SPEED);
-    chassis.pid_wait();
-  }
+  matchload_wiggle(6);
 
   // 6. move to long goal (back some offset)
   scoring.set_state_and_move(Scoring::State::INTAKING);
@@ -40,12 +34,7 @@ void skills_auton() {
   chassis.pid_wait_quick();
 
   // 8. run high goal
-  for (int i = 0; i < 7; i++) {
-    scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-    pros::delay(1200);
-    scoring.set_state_and_move(Scoring::State::OUTTAKING);
-    pros::delay(200);
-  }
+  highgoal_antijam(7);
 
   chassis.odom_xy_set(2_tile - 1.5_in, 1_tile - 5_in); // reset pos
   scoring.set_state_and_move(Scoring::State::NONE);
@@ -73,13 +62,7 @@ void skills_auton() {
   chassis.pid_wait_quick();
 
   // 5. intake
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-  for (int i = 0; i < 6; i++) {
-    chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
-    chassis.pid_wait();
-    chassis.pid_drive_set(3.35_in, DRIVE_SPEED);
-    chassis.pid_wait();
-  }
+  matchload_wiggle(6);
 
   // 6. move to long goal (back some offset)
   scoring.set_state_and_move(Scoring::State::INTAKING);
@@ -88,12 +71,7 @@ void skills_auton() {
   chassis.pid_wait_quick();
 
   // 8. run high goal
-  for (int i = 0; i < 7; i++) {
-    scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-    pros::delay(1200);
-    scoring.set_state_and_move(Scoring::State::OUTTAKING);
-    pros::delay(200);
-  }
+  highgoal_antijam(7);
 
   chassis.odom_xy_set(-2_tile - 1.5_in, 1_tile - 5_in); // reset pos
   scoring.set_state_and_move(Scoring::State::NONE);

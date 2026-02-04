@@ -36,6 +36,25 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);
 }
 
+void matchload_wiggle(int times = 6) {
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  for (int i = 0; i < times; i++) {
+    chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_drive_set(3.35_in, DRIVE_SPEED);
+    chassis.pid_wait();
+  }
+}
+
+void highgoal_antijam(int times = 7) {
+  for (int i = 0; i < times; i++) {
+    scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+    pros::delay(1200);
+    scoring.set_state_and_move(Scoring::State::OUTTAKING);
+    pros::delay(200);
+  }
+}
+
 /*
  * for Autonoous Routines
 
@@ -45,8 +64,8 @@ void default_constants() {
  * driver's left = -90 deg / 270 deg, negative X
  */
 
- void test_auton() {
+void test_auton() {
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
   chassis.pid_odom_set({{0_in, 48_in}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
- }
+}
