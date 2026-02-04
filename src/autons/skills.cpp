@@ -35,7 +35,7 @@ void skills_auton() {
 
   // 6. move to long goal (back some offset)
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_odom_set({{2_tile - 6.5_in, 1_tile - 6_in}, REVERSE, (int) (DRIVE_SPEED * 0.65)});
+  chassis.pid_odom_set({{2_tile - 7_in, 1_tile - 6_in}, REVERSE, (int) (DRIVE_SPEED * 0.65)});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
@@ -83,7 +83,7 @@ void skills_auton() {
 
   // 6. move to long goal (back some offset)
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_odom_set({{-2_tile + 2_in, 1_tile - 4_in}, REVERSE, (int) (DRIVE_SPEED * 0.65)});
+  chassis.pid_odom_set({{-2_tile + 2_in, 1_tile - 2_in}, REVERSE, (int) (DRIVE_SPEED * 0.65)});
   tongue_piston.set(false);
   chassis.pid_wait_quick();
 
