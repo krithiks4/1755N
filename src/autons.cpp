@@ -6,11 +6,11 @@ void default_constants() {
   // P, I, D, and Start I
   chassis.pid_drive_constants_forward_set(15.0, 0.0, 45.3);
   chassis.pid_drive_constants_backward_set(15.5, 0.0, 45.3);
-  chassis.pid_heading_constants_set(0.0, 0.0, 0.0);
+  chassis.pid_heading_constants_set(3.0, 0.0, 45.0);
   chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);
   chassis.pid_swing_constants_set(5.0, 0.0, 30.0);
-  chassis.pid_odom_angular_constants_set(6.0, 0.0, 50.0);
-  chassis.pid_odom_boomerang_constants_set(5.0, 0.0, 45.0);
+  chassis.pid_odom_angular_constants_set(3.0, 0.0, 50.0);
+  chassis.pid_odom_boomerang_constants_set(2.6, 0.0, 50.0);
 
   // Exit conditions - REDUCED TIMEOUTS FOR SPEED
   chassis.pid_turn_exit_condition_set(50_ms, 2_deg, 150_ms, 5_deg, 250_ms, 250_ms);
