@@ -1,60 +1,110 @@
 #include "rightside.hpp"
 
+// Autonomous Constants
+// These are out of 127
+const int DRIVE_SPEED = 105;
+const int TURN_SPEED = 90;
+const int SWING_SPEED = 90;
+
 // long goal right side + middle low
 void right_side_auton() {
-  chassis.odom_xyt_set(0.5_tile, 0_in, 45_deg); // ORIGIN POSITION: X: EXACTLY MIDDLE OF FIELD, Y: 1 TILE from SIDE
+  // everything flipped
+  chassis.odom_x_flip(true);
+  chassis.odom_theta_flip(true);
 
-  scoring.set_state_and_move(Scoring::State::INTAKING);
-
-  // go to center balls
-  chassis.pid_odom_set({{1_tile, 1_tile, 0_deg}, FORWARD, DRIVE_SPEED});
-  chassis.pid_wait_quick_chain();
-
-  // go to center goal
-  chassis.pid_odom_set({{0.5_tile, 1.5_tile, -45_deg}, FORWARD, DRIVE_SPEED});
+  // 1. go forward 1 tile
+  chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  chassis.pid_drive_set(0.865_tile, DRIVE_SPEED);
   chassis.pid_wait();
 
-  // low goal
-  scoring.set_state_and_move(Scoring::State::OUTTAKING);
-  pros::delay(2000);
+  // 2. turn towards left side
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // 3. go forward 0.65 tile
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  chassis.pid_drive_set(0.6_tile, DRIVE_SPEED*0.35);
+  chassis.pid_wait();
+
+  scoring.set_state_and_move(Scoring::State::INTAKING);
+  tongue_piston.set(true);
+  chassis.pid_drive_set(0.2_tile, DRIVE_SPEED*0.35);
+  chassis.pid_wait();
+  tongue_piston.set(false);
+
+  // 4. turn 45 degrees counterclockwise
+  chassis.pid_turn_set(-124_deg + 180_deg, TURN_SPEED); // 180 deg around for right side
+  chassis.pid_wait();
+
+  // 5. move backwards 0.75 tiles
+  chassis.pid_drive_set(0.65_tile, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 6. set state outtake for 1.25 seconds then turn off
+  scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
+  pros::delay(1250);
   scoring.set_state_and_move(Scoring::State::NONE);
 
-  // go to between high goal and loader (activate tonge)
-  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
-  tongue_piston.set(true);
+  // 7. go forward 1.625 tiles to matchloader
+  chassis.pid_wait();
+  chassis.pid_odom_set({{-1.75_tile, -0.25_tile, -136.5_deg}, FORWARD, (int)(0.75*DRIVE_SPEED)});
   chassis.pid_wait();
 
-  // 2. turn towards matchloader
-  chassis.pid_turn_set({2_tile, -1_tile}, FORWARD, TURN_SPEED);
-  chassis.pid_wait_quick();
+  // 8. turn 45 degrees counterclockwise
+  chassis.pid_turn_set(-180_deg, TURN_SPEED);
+  chassis.pid_wait();
 
-  // 4. thrust forward (without odom)
-  chassis.pid_drive_set(14.9_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
+  // 9. set tongue_piston true
+  tongue_piston.set(true);
 
-  // 5. intake
+  // 10. set state intaking
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  pros::delay(450);
 
-  // 6. move to long goal (back some offset)
-  chassis.pid_odom_set({{2_tile, 1_tile - 10_in}, REVERSE, DRIVE_SPEED});
-  tongue_piston.set(false);
-  chassis.pid_wait_quick();
+  // 11. go forward 14 inches
+  chassis.pid_drive_set(16.5_in, 0.6*DRIVE_SPEED);
+  chassis.pid_wait();
 
-  // 8. run high goal
+  // 12. back 4 inches
+  chassis.pid_drive_set(-4_in, 0.6*DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 13. forward 5 inches
+  chassis.pid_drive_set(5_in, 0.6*DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 14. back 1.75 tiles
+  chassis.pid_drive_set(-1.9_tile, 0.8*DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 15. set state high goal for 2 seconds
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
   pros::delay(2000);
   scoring.set_state_and_move(Scoring::State::NONE);
 
-  // go to between high goal and loader
-  chassis.pid_odom_set({{2_tile, 0_tile}, FORWARD, DRIVE_SPEED});
+  // 16. move forward 0.75 tile
+  chassis.pid_drive_set(0.75_tile, DRIVE_SPEED);
   chassis.pid_wait();
 
-  // ACTIVATE WING
-
-  // go to right side of goal so that wing can be used
-  chassis.pid_odom_set({{2.5_tile, 1.4_tile, 0_deg}, FORWARD, DRIVE_SPEED});
+  // 17. turn towards 135 degrees then backwards 1 tile
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-0.65_tile, 0.75*DRIVE_SPEED);
   chassis.pid_wait();
 
-  // go backwards to stop touching the balls????
+  // 18. activate wing piston
+  wing_piston.set(true);
+
+  // go staight
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // 19. move backward one tile
+  chassis.pid_drive_set(-0.8_tile, 0.75*DRIVE_SPEED);
+
+  // 18. let wing piston fal
+  wing_piston.set(false);
+
+  // 20. move forward for 100ms
+  chassis.pid_drive_set(1_tile, DRIVE_SPEED);
+  chassis.pid_wait();
 }

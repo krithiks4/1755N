@@ -1,5 +1,11 @@
 #include "autons.hpp"
 
+// Autonomous Constants
+// These are out of 127
+const int DRIVE_SPEED = 105;
+const int TURN_SPEED = 90;
+const int SWING_SPEED = 90;
+
 // PID Constants
 void default_constants() {
   
@@ -7,7 +13,7 @@ void default_constants() {
   chassis.pid_drive_constants_forward_set(15.0, 0.0, 45.3);
   chassis.pid_drive_constants_backward_set(15.5, 0.0, 45.3);
   chassis.pid_heading_constants_set(3.0, 0.0, 45.0);
-  chassis.pid_turn_constants_set(2.0, 0.0, 10.0, 15);
+  chassis.pid_turn_constants_set(3.0, 0.0, 25.0, 15);
   chassis.pid_swing_constants_set(5.0, 0.0, 30.0);
   chassis.pid_odom_angular_constants_set(3.0, 0.0, 50.0);
   chassis.pid_odom_boomerang_constants_set(2.6, 0.0, 50.0);
@@ -36,7 +42,7 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);
 }
 
-void matchload_wiggle(int times = 6) {
+void matchload_wiggle(int times) {
   scoring.set_state_and_move(Scoring::State::INTAKING);
   for (int i = 0; i < times; i++) {
     chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
@@ -46,7 +52,7 @@ void matchload_wiggle(int times = 6) {
   }
 }
 
-void highgoal_antijam(int times = 7) {
+void highgoal_antijam(int times) {
   for (int i = 0; i < times; i++) {
     scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
     pros::delay(1200);
