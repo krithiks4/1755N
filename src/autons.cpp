@@ -45,8 +45,10 @@ void default_constants() {
 void matchload_wiggle(int times) {
   scoring.set_state_and_move(Scoring::State::INTAKING);
   for (int i = 0; i < times; i++) {
+    if (pros::competition::is_disabled()) break;
     chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
     chassis.pid_wait();
+    if (pros::competition::is_disabled()) break;
     chassis.pid_drive_set(3.35_in, DRIVE_SPEED);
     chassis.pid_wait();
   }
@@ -54,8 +56,10 @@ void matchload_wiggle(int times) {
 
 void highgoal_antijam(int times) {
   for (int i = 0; i < times; i++) {
+    if (pros::competition::is_disabled()) break;
     scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
     pros::delay(1200);
+    if (pros::competition::is_disabled()) break;
     scoring.set_state_and_move(Scoring::State::OUTTAKING);
     pros::delay(200);
   }
