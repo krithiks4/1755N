@@ -8,13 +8,12 @@ const int SWING_SPEED = 90;
 
 // long goal right side + middle low
 void right_side_auton() {
-
-  // 1. go forward 1 tile
+// 1. go forward 1 tile
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
   chassis.pid_drive_set(0.865_tile, DRIVE_SPEED);
   chassis.pid_wait();
 
-  // 2. turn towards right side
+  // 2. turn towards left side
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
@@ -28,7 +27,7 @@ void right_side_auton() {
   chassis.pid_drive_set(0.5_tile, DRIVE_SPEED*0.7);
   chassis.pid_wait();
 
-  // 4. turn 45 degrees clockwise
+  // 4. turn 45 degrees counterclockwise
   chassis.pid_turn_set(124_deg, TURN_SPEED);
   chassis.pid_wait();
 
@@ -38,13 +37,13 @@ void right_side_auton() {
 
   // 6. set state outtake for 1.25 seconds then turn off
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1500);
+  pros::delay(1700);
   scoring.set_state_and_move(Scoring::State::INTAKING);
   tongue_piston.set(false);
 
   // 7. go forward 1.625 tiles to matchloader
   chassis.pid_wait();
-  chassis.pid_odom_set({{1.66_tile, -0.25_tile}, FORWARD, (int)(0.8*DRIVE_SPEED)});
+  chassis.pid_odom_set({{1.66_tile - 2_in, -0.25_tile}, FORWARD, (int)(0.8*DRIVE_SPEED)});
   chassis.pid_wait();
   
   tongue_piston.set(true);
@@ -68,7 +67,7 @@ void right_side_auton() {
   chassis.pid_wait();
 
   // 14. back
-  chassis.pid_odom_set({{1_in, 1.5_tile}, REVERSE, DRIVE_SPEED});
+  chassis.pid_odom_set({{0.5_in, 1.3_tile}, REVERSE, DRIVE_SPEED});
   chassis.pid_wait();
 
   // 15. set state high goal for 2 seconds
@@ -95,16 +94,13 @@ void right_side_auton() {
   wing_piston.set(true);
 
   // go staight
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
-
-  // 19. move backward one tile
-  chassis.pid_drive_set(-0.8_tile, 0.75*DRIVE_SPEED);
 
   // 18. let wing piston fal
   wing_piston.set(false);
 
-  // 20. move forward for 100ms
-  chassis.pid_drive_set(1_tile, DRIVE_SPEED);
+  // 19. move backward one tile
+  chassis.pid_drive_set(-0.8_tile, 127);
   chassis.pid_wait();
 }
