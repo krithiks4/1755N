@@ -1,4 +1,4 @@
-#include "leftside.hpp"
+#include "autons/leftside.hpp"
 
 // Autonomous Constants
 // These are out of 127
@@ -37,7 +37,7 @@ void left_side_auton() {
 
   // 6. set state outtake for 1.25 seconds then turn off
   scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  pros::delay(1700);
+  pros::delay(2000);
   scoring.set_state_and_move(Scoring::State::INTAKING);
   tongue_piston.set(false);
 
@@ -70,39 +70,6 @@ void left_side_auton() {
   chassis.pid_odom_set({{-2_in, 1_tile - 2_in}, REVERSE, DRIVE_SPEED});
   chassis.pid_wait();
 
-  highgoal_antijam(10);
-
   // 15. set state high goal for 2 seconds
-  // scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  // pros::delay(750);
-  // scoring.set_state_and_move(Scoring::State::OUTTAKING);
-  // pros::delay(100);
-  // scoring.set_state_and_move(Scoring::State::HIGH_GOAL);
-  // pros::delay(750);
-  // scoring.set_state_and_move(Scoring::State::NONE);
-  // chassis.odom_xyt_set(1_in, 0_in, 180_deg);
-
-  // // 16. move forward 0.75 tile
-  // chassis.pid_drive_set(0.75_tile, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // // 17. turn towards 135 degrees then backwards 1 tile
-  // chassis.pid_turn_set(135_deg, TURN_SPEED);
-  // chassis.pid_wait();
-  // chassis.pid_drive_set(-0.65_tile + 4_in, 0.75*DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // // 18. activate wing piston
-  // wing_piston.set(true);
-
-  // // go staight
-  // chassis.pid_turn_set(190_deg, TURN_SPEED);
-  // chassis.pid_wait();
-
-  // // 18. let wing piston fal
-  // wing_piston.set(false);
-
-  // // 19. move backward one tile
-  // chassis.pid_drive_set(-1_tile, 127);
-  // chassis.pid_wait();
+  highgoal_antijam(12);
 }

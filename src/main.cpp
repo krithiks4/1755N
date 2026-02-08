@@ -94,9 +94,9 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
     {"skills\n\n!!!!", skills_auton},
-    {"RIGHT SIDE AUTON\n\nRight side autonomous routine", right_side_auton},
+    {"LEFT SIDE AUTON\n\nLeft side autonomous routine", left_side_auton},
+    {"SPECIAL LEFT AUTON\n\nputting everything into low goal!!!!", right_side_auton},
     {"tests\n\ntets!!!", test_auton}
   });
 

@@ -12,8 +12,8 @@ void default_constants() {
   // P, I, D, and Start I
   chassis.pid_drive_constants_forward_set(15.0, 0.0, 45.3);
   chassis.pid_drive_constants_backward_set(15.5, 0.0, 45.3);
-  chassis.pid_heading_constants_set(3.0, 0.0, 45.0);
-  chassis.pid_turn_constants_set(3.0, 0.0, 25.0, 15);
+  chassis.pid_heading_constants_set(3.0, 0.0, 35.0);
+  chassis.pid_turn_constants_set(3.5, 0.01, 25.0, 15);
   chassis.pid_swing_constants_set(5.0, 0.0, 30.0);
   chassis.pid_odom_angular_constants_set(3.0, 0.0, 50.0);
   chassis.pid_odom_boomerang_constants_set(2.6, 0.0, 50.0);
@@ -49,7 +49,7 @@ void matchload_wiggle(int times) {
     chassis.pid_drive_set(-2.5_in, DRIVE_SPEED);
     chassis.pid_wait();
     if (pros::competition::is_disabled()) break;
-    chassis.pid_drive_set(3.35_in, DRIVE_SPEED);
+    chassis.pid_drive_set(2.5_in, DRIVE_SPEED);
     chassis.pid_wait();
   }
 }
@@ -61,7 +61,7 @@ void highgoal_antijam(int times) {
     pros::delay(1200);
     if (pros::competition::is_disabled()) break;
     scoring.set_state_and_move(Scoring::State::OUTTAKING);
-    pros::delay(200);
+    pros::delay(100);
   }
 }
 
@@ -77,5 +77,35 @@ void highgoal_antijam(int times) {
 void test_auton() {
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);
   chassis.pid_odom_set({{0_in, 48_in}, FORWARD, DRIVE_SPEED});
+  chassis.pid_wait();
+}
+
+void wing_auton(bool right) {
+  chassis.odom_xyt_set(1_in, 0_in, 180_deg);
+
+  tongue_piston.set(false);
+
+  // 16. move forward 0.75 tile
+  chassis.pid_drive_set(0.75_tile, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 17. turn towards 135 degrees then backwards 1 tile
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-0.65_tile + 4_in, 0.75*DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // 18. activate wing piston
+  wing_piston.set(true);
+
+  // go staight
+  chassis.pid_turn_set(right ? 170_deg : 190_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // 18. let wing piston fal
+  wing_piston.set(false);
+
+  // 19. move backward one tile
+  chassis.pid_drive_set(-1_tile, 127);
   chassis.pid_wait();
 }
