@@ -35,11 +35,14 @@ void skills_auton() {
 
   // 6. move to long goal (back some offset)
   scoring.set_state_and_move(Scoring::State::INTAKING);
+  tongue_piston.set(false);
   chassis.pid_odom_set({{2_tile - 9_in, 1_tile - 5_in}, REVERSE, (int) (DRIVE_SPEED * 0.65)});
   chassis.pid_wait_quick();
 
   // 8. run high goal
+  tongue_piston.set(true);
   highgoal_antijam(6);
+  tongue_piston.set(false);
 
   chassis.odom_xyt_set(2_tile - 1.5_in, 1_tile - 5_in, 180_deg); // reset pos
   scoring.set_state_and_move(Scoring::State::NONE);
@@ -50,7 +53,7 @@ void skills_auton() {
   chassis.pid_wait();
 
   // Go to left side
-  chassis.pid_odom_set({{-2_tile, 0.5_tile + 3_in}, FORWARD, DRIVE_SPEED});
+  chassis.pid_odom_set({{-2_tile - 2_in, 0.5_tile + 4_in}, FORWARD, DRIVE_SPEED});
   chassis.pid_wait();
 
   // LEFT SIDE
@@ -73,11 +76,14 @@ void skills_auton() {
 
   // 6. move to long goal (back some offset)
   scoring.set_state_and_move(Scoring::State::INTAKING);
-  chassis.pid_odom_set({{-2_tile, 1_tile}, REVERSE, (int) (DRIVE_SPEED * 0.65)});
+  tongue_piston.set(false);
+  chassis.pid_odom_set({{-2_tile - 2_in, 1_tile}, REVERSE, (int) (DRIVE_SPEED * 0.65)});
   chassis.pid_wait_quick();
 
   // 8. run high goal
+  tongue_piston.set(true);
   highgoal_antijam(6);
+  tongue_piston.set(false);
 
   chassis.odom_xyt_set(-2_tile - 1.5_in, 1_tile - 5_in, 180_deg); // reset pos
   scoring.set_state_and_move(Scoring::State::NONE);

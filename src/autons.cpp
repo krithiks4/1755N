@@ -61,7 +61,7 @@ void highgoal_antijam(int times) {
     pros::delay(1200);
     if (pros::competition::is_disabled()) break;
     scoring.set_state_and_move(Scoring::State::OUTTAKING);
-    pros::delay(100);
+    pros::delay(200);
   }
 }
 
